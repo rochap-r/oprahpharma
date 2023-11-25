@@ -10,4 +10,4 @@ Nous Sommes ravi de compter un nouvel utilisateur parmi nous.
 <br>
 <b>Email</b>: {{ $email }} <br>
 <br><br>
-<a href="{{ route('home') }}">Connectez-vous pour voir les details</a>
+<a href="{{ route('app.home') }}">Connectez-vous pour voir les details</a>

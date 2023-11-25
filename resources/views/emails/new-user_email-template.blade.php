@@ -9,7 +9,7 @@ vous pouvez récupérer les coordonnées de votre compte ci-dessous :
 <br>
 <b>Mot de passe</b>: {{ $password }}
 <br><br>
-<a href="{{ route('home') }}">Connectez-vous</a>
+<a href="{{ route('app.home') }}">Connectez-vous</a>
 
 <br>
 <b>Note</b> : Il est recommandé dès votre première connexion de pouvoir changer le mot de passe.
