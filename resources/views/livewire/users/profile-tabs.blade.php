@@ -4,10 +4,10 @@
     <!-- Default Tab -->
         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
             <li class="nav-item">
-                <a class="nav-link {{ $tab == 'profile_infos' ? 'active' : '' }}" href="{{ route('user.profile', ['tab' => 'profile_infos']) }}">Infos Personnelles</a>
+                <a class="nav-link {{ $tab == 'profile_infos' ? 'active' : '' }}" href="{{ route('app.user.profile', ['tab' => 'profile_infos']) }}">Infos Personnelles</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ $tab == 'profile_password' ? 'active' : '' }}" href="{{ route('user.profile', ['tab' => 'profile_password']) }}">Sécurité</a>
+                <a class="nav-link {{ $tab == 'profile_password' ? 'active' : '' }}" href="{{ route('app.user.profile', ['tab' => 'profile_password']) }}">Sécurité</a>
             </li>
         </ul>
         <hr class="bg-primary">
