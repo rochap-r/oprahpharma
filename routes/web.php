@@ -41,7 +41,7 @@ Route::prefix('app')->name('app.')->middleware(['auth','check_permissions'])->gr
 });
 
 Route::get('/', function () {
-    return redirect()->route(RouteServiceProvider::HOME);
+    return redirect()->route('app.home');
 });
 
 
