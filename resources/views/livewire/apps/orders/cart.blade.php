@@ -21,23 +21,23 @@
                 </div>
 
 
-                <div class="card-body overflow-hidden">
+                <div class="card-body col-12 overflow-hidden">
                     {{--affichage du rapport--}}
                     <hr class="bg-dark">
-                    <div class="container ">
+                    <div class="container">
                         <div class="row">
                             <!-- Carte pour le nombre total de commandes -->
-                            <div class="col-md-6 col-lg-6 mb-4">
+                            <div class="col-md-6 col-lg-6 col-sm-12 mb-4">
                                 <div class="card text-white bg-primary">
                                     <div class="card-body">
-                                        <h5 class="card-title text-uppercase">nb Cmd du {{ $today }}  </h5>
+                                        <h5 class="card-title text-uppercase">NB Cmd du {{ $today }}  </h5>
                                         <p class="card-text display-5 fw-bold">{{ $totalOrders }} Commandes</p>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Carte pour le montant total des commandes -->
-                            <div class="col-md-6 col-lg-6 mb-4">
+                            <div class="col-md-6 col-lg-6 col-sm-12 mb-4">
                                 <div class="card text-white bg-success">
                                     <div class="card-body">
                                         <h5 class="card-title text-uppercase">Recette du {{ $today }}</h5>
@@ -49,7 +49,7 @@
                         </div>
 
                         <!-- Carte pour les 5 dernières commandes -->
-                        <div class="card mt-2 shadow-lg w-100">
+                        <div class="card mt-2 shadow-lg w-100 col-xl-12 col-md-12 col-sm-12">
                             <div class="card-header bg-primary text-white">
                                 <h2 class="text-uppercase mx-2 my-0 text-white">Les 5 dernières commandes</h2>
                             </div>
