@@ -76,6 +76,12 @@
             var quantityInStock = event.detail.quantityInStock;
             alert('La quantité spécifiée (' + quantity + ') est supérieure à la quantité en stock (' + quantityInStock + ')');
         });
+
+        window.addEventListener('quantity-error-empty', function (event) {
+            var quantity = event.detail.quantity;
+            alert('Désolé, vous ne pouvez pas ajouter un produit au panier avec (' + quantity + ') comme quantité');
+        });
+
         window.addEventListener('quantity-error-checkout', function (event) {
             var quantity = event.detail.quantity;
             alert('Désolé, vous ne pouvez pas passer une commande avec une quantité de ' +

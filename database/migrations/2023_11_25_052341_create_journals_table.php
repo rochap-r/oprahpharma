@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('supply_id')->references('id')->on('supplies')->onDelete('cascade');
             $table->integer('quantity');
             $table->decimal('unit_purchase_price', 10, 2);
-            $table->date('supply_date');
+            $table->datetime('supply_date');
             $table->timestamps();
         });
     }
