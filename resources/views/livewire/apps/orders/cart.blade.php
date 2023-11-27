@@ -21,6 +21,7 @@
                 </div>
 
 
+
                 <div class="card-body col-12 overflow-hidden">
                     {{--affichage du rapport--}}
                     <hr class="bg-dark">
@@ -30,7 +31,9 @@
                             <div class="col-md-6 col-lg-6 col-sm-12 mb-4">
                                 <div class="card text-white bg-primary">
                                     <div class="card-body">
+
                                         <h5 class="card-title text-uppercase">NB Cmd du {{ $today }}  </h5>
+
                                         <p class="card-text display-5 fw-bold">{{ $totalOrders }} Commandes</p>
                                     </div>
                                 </div>
