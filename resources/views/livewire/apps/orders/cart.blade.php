@@ -2,24 +2,15 @@
     {{-- Success is as dangerous as failure. --}}
 
     <div class="row ">
-        <div class="card border-0 overflow-auto">
+        <div class="card border-0">
             <div
                 class="card-header p-5 pb-0 bg-transparent border-0 d-flex align-items-center justify-content-between gap-3 flex-wrap">
-                <div
-                    class="card-header p-5 pb-0 bg-transparent border-0 d-flex align-items-center justify-content-between gap-3 flex-wrap">
+                <div class="card-header p-5 pb-0 bg-transparent border-0 d-flex align-items-center justify-content-between gap-3 flex-wrap" style="overflow-x: hidden; width: 100%;">
                     <h4 class="mb-0 text-uppercase">Liste des commandes</h4>
-                    <div class="d-flex align-items-center gap-6">
-                        <form class="search-form card-search w-auto flex-shrink-0" action="">
-                            <input type="text" name="search" class=" bg-white form-control" placeholder="Search">
-                            <button type="submit" class="btn"><img src="{{asset('assets/img/svg/search.svg')}}" alt="">
-                            </button>
-                        </form>
-                        <a class="btn btn-sm btn-primary" href="#" data-bs-toggle="modal"
-                           data-bs-target="#checkout_modal">
+                    <div class="d-flex align-items-center">
+                        <a class="btn btn-sm btn-primary" href="#" data-bs-toggle="modal" data-bs-target="#checkout_modal">
                             <!-- Download SVG icon from http://tabler-icons.io/i/settings -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24"
-                                 height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                 stroke-linecap="round" stroke-linejoin="round">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                 <path d="M12 5l0 14"></path>
                                 <path d="M5 12l14 0"></path>
@@ -30,7 +21,7 @@
                 </div>
 
 
-                <div class="card-body">
+                <div class="card-body overflow-hidden">
                     {{--affichage du rapport--}}
                     <hr class="bg-dark">
                     <div class="container ">
@@ -39,7 +30,7 @@
                             <div class="col-md-6 col-lg-6 mb-4">
                                 <div class="card text-white bg-primary">
                                     <div class="card-body">
-                                        <h5 class="card-title text-uppercase">nb Cmd du {{ date('d/m/Y') }}  </h5>
+                                        <h5 class="card-title text-uppercase">nb Cmd du {{ $today }}  </h5>
                                         <p class="card-text display-5 fw-bold">{{ $totalOrders }} Commandes</p>
                                     </div>
                                 </div>
@@ -49,7 +40,7 @@
                             <div class="col-md-6 col-lg-6 mb-4">
                                 <div class="card text-white bg-success">
                                     <div class="card-body">
-                                        <h5 class="card-title text-uppercase">Recette du {{ date('d/m/Y') }}</h5>
+                                        <h5 class="card-title text-uppercase">Recette du {{ $today }}</h5>
                                         <p class="card-text display-5 fw-bold">{{ number_format(round($totalAmount), 0, ',', ' ') }}
                                             FC</p>
                                     </div>
@@ -137,7 +128,7 @@
                     <!-- Ici, vous pouvez ajouter le contenu de votre boîte modale. Par exemple, un formulaire pour passer la commande. -->
                     <div class="container pb-1">
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-sm-12 col-xl-6 col-md-6">
                                 <h2 class="my-3">Produits</h2>
                                 <input id="input_search" type="text" class="form-control mb-3"
                                        placeholder="Rechercher un produit"
@@ -151,6 +142,7 @@
                                             <th scope="col">stock</th>
                                             <th scope="col">Qté</th>
                                             <th scope="col">Action</th>
+
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -159,10 +151,10 @@
                                                 <td>{{ $product->product_name }}</td>
                                                 <td>{{ number_format($product->unit_price, 0, ',', ' ') }} FC</td>
                                                 <td>{{ $product->supplies->last() ? $product->supplies->last()->quantity_in_stock : 'Non disponible' }}</td>
-                                                <td>
+                                                <td class="w-50">
                                                     <input type="number" min="1"
                                                            max="{{ $product->supplies->last() ? $product->supplies->last()->quantity_in_stock : 0 }}"
-                                                           class="form-control" id="quantity{{ $product->id }}">
+                                                           class="form-control" id="quantity{{ $product->id }}" style="width:100%!important;">
                                                 </td>
                                                 <td>
                                                     <button class="btn btn-primary btn-sm"
@@ -171,6 +163,7 @@
                                                     </button>
                                                 </td>
                                             </tr>
+
                                         @endforeach
                                         </tbody>
                                     </table>
@@ -178,7 +171,7 @@
 
 
                             </div>
-                            <div class="col-6">
+                            <div class="col-sm-12 col-xl-6 col-md-6">
                                 <h2 class="my-2">Panier</h2>
                                 <div class="alert alert-success">
                                     <h3 class="text-success">Total à Payer: {{ number_format($total, 0, ',', ' ') }}

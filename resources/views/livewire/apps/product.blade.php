@@ -69,7 +69,7 @@
                                         {{ $product->product_name }}
                                     </td>
                                     <td class="text-muted">
-                                        {{ $product->unit_price }}
+                                        {{  number_format($product->unit_price, 0, ',', ' ') }} FC
                                     </td>
                                     <td class="text-muted">
                                         {{ $product->order_items_count }} Commandes

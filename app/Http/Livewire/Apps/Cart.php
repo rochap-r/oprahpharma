@@ -33,6 +33,7 @@ class Cart extends Component
         'refreshCart' => '$refresh',
         'quantity-error' => 'handleQuantityError',
         'quantity-error-checkout ' => 'handleQuantityError',
+        'quantity-error-empty ' => 'handleQuantityError',
     ];
 
     public function mount()
@@ -49,7 +50,7 @@ class Cart extends Component
         $this->totalOrders = Order::where('user_id', $user->id)
             ->whereDate('order_date', $today)
             ->count();
-
+        //dd($this->totalOrders);
         $this->totalAmount = Order::where('user_id', $user->id)
             ->whereDate('order_date', $today)
             ->sum('total_price');
@@ -67,20 +68,27 @@ class Cart extends Component
         $product = Product::find($productId);
 
         if ($product) {
-            if ($quantity > $product->supplies->last()->quantity_in_stock) {
+            if (empty($quantity)) {
                 // Émettez un événement Livewire pour déclencher l'alerte JavaScript lorsque le stock est < à la qté spécifiée
-                $this->dispatchBrowserEvent('quantity-error', [
-                    'quantity' => $quantity, 'quantityInStock' => $product->supplies->last()->quantity_in_stock
+                $this->dispatchBrowserEvent('quantity-error-empty', [
+                    'quantity' => 0,
                 ]);
             } else {
-                if (isset($this->cart[$product->id])) {
-                    $this->cart[$product->id] += $quantity;
+                if ($quantity > $product->supplies->last()->quantity_in_stock) {
+                    // Émettez un événement Livewire pour déclencher l'alerte JavaScript lorsque le stock est < à la qté spécifiée
+                    $this->dispatchBrowserEvent('quantity-error', [
+                        'quantity' => $quantity, 'quantityInStock' => $product->supplies->last()->quantity_in_stock
+                    ]);
                 } else {
-                    $this->cart[$product->id] = $quantity;
-                }
+                    if (isset($this->cart[$product->id])) {
+                        $this->cart[$product->id] += $quantity;
+                    } else {
+                        $this->cart[$product->id] = $quantity;
+                    }
 
-                $this->total += $quantity * $product->unit_price;
-                $this->search = null;
+                    $this->total += $quantity * $product->unit_price;
+                    $this->search = null;
+                }
             }
         }
     }
@@ -260,12 +268,14 @@ class Cart extends Component
                 }])
                 ->get();
         }
+        $today=Carbon::now('Africa/Lubumbashi')->format('Y-m-d');
 
         return view('livewire.apps.orders.cart', [
             'products' => $products,
             'totalOrders' => $this->totalOrders,
             'totalAmount' => $this->totalAmount,
             'recentOrders' => $this->recentOrders,
+            'today'=>$today,
         ]);
     }
 }

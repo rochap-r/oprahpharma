@@ -124,7 +124,7 @@
                                                     <label for="per{{$i}}" class="permissions form-check form-check-inline">
                                                         <input type="checkbox" class="form-check-input" id="per{{$i}}"
                                                                value="{{ $permissions[$i]->id }}"  wire:model="permission" >
-                                                        <span class="form-check-label">{{ $permissions[$i]->description  }}</span>
+                                                        <span class="form-check-label">{{ $permissions[$i]->name  }}</span>
                                                     </label>
                                                 @endfor
                                             </div>
@@ -187,7 +187,7 @@
                                                         <input type="checkbox" class="form-check-input" id="created{{$i}}" {{ (is_array($permission)) ?
                                                             in_array($permissions[$i]->id,$permission) ? 'checked' : '' : ""   }}
                                                         value="{{ $permissions[$i]->id }}"  wire:model="permission" >
-                                                        <span class="form-check-label">{{ $permissions[$i]->description  }}</span>
+                                                        <span class="form-check-label">{{ $permissions[$i]->name  }}</span>
                                                     </label>
                                                 @endfor
                                             </div>

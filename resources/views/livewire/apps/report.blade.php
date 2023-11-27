@@ -6,11 +6,11 @@
             <div class="row mb-4">
                 <div class="col">
                     <label for="startDate" class="form-label">Date de début</label>
-                    <input type="date" id="startDate" wire:model="startDate" class="form-control">
+                    <input type="datetime-local" id="startDate" wire:model="startDate" class="form-control">
                 </div>
                 <div class="col">
                     <label for="endDate" class="form-label">Date de fin</label>
-                    <input type="date" id="endDate" wire:model="endDate" class="form-control">
+                    <input type="datetime-local" id="endDate" wire:model="endDate" class="form-control">
                 </div>
                 <div class="col">
                     <label for="userId" class="form-label">Utilisateur</label>
