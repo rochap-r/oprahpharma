@@ -10,4 +10,9 @@ class ReportController extends Controller
     {
         return view('apps.reports.index');
     }
+
+    public function StockReport()
+    {
+        return view('apps.reports.stock-report');
+    }
 }

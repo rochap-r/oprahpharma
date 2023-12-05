@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Unit extends Model
 {
     use HasFactory;
-    protected $fillable=['unit_name','unit_sigle'];
+    protected $fillable=['unit_name','unit_sigle','minimum_stock_level'];
 
 
     public function products()

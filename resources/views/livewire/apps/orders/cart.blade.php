@@ -5,12 +5,17 @@
         <div class="card border-0">
             <div
                 class="card-header p-5 pb-0 bg-transparent border-0 d-flex align-items-center justify-content-between gap-3 flex-wrap">
-                <div class="card-header p-5 pb-0 bg-transparent border-0 d-flex align-items-center justify-content-between gap-3 flex-wrap" style="overflow-x: hidden; width: 100%;">
+                <div
+                    class="card-header p-5 pb-0 bg-transparent border-0 d-flex align-items-center justify-content-between gap-3 flex-wrap"
+                    style="overflow-x: hidden; width: 100%;">
                     <h4 class="mb-0 text-uppercase">Liste des commandes</h4>
                     <div class="d-flex align-items-center">
-                        <a class="btn btn-sm btn-primary" href="#" data-bs-toggle="modal" data-bs-target="#checkout_modal">
+                        <a class="btn btn-sm btn-primary" href="#" data-bs-toggle="modal"
+                           data-bs-target="#checkout_modal">
                             <!-- Download SVG icon from http://tabler-icons.io/i/settings -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24"
+                                 height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                 stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                 <path d="M12 5l0 14"></path>
                                 <path d="M5 12l14 0"></path>
@@ -19,7 +24,6 @@
                         </a>
                     </div>
                 </div>
-
 
 
                 <div class="card-body col-12 overflow-hidden">
@@ -68,7 +72,8 @@
                                     </thead>
                                     <tbody>
                                     @foreach($recentOrders as $order)
-                                        <tr data-bs-toggle="collapse" data-bs-target="#order{{$order->id}}" aria-expanded="false" aria-controls="order{{$order->id}}">
+                                        <tr data-bs-toggle="collapse" data-bs-target="#order{{$order->id}}"
+                                            aria-expanded="false" aria-controls="order{{$order->id}}">
                                             <td>{{ $order->user->lname }} - {{ $order->user->name }}</td>
                                             <td>{{ $order->order_date }}</td>
                                             <td>{{ number_format(round($order->total_price), 0, ',', ' ') }} FC</td>
@@ -76,7 +81,9 @@
                                         </tr>
                                         <tr>
                                             <td colspan="4">
-                                                <div id="order{{$order->id}}" class="collapse" aria-labelledby="headingOrder{{$order->id}}" data-bs-parent="#order{{$order->id}}">
+                                                <div id="order{{$order->id}}" class="collapse"
+                                                     aria-labelledby="headingOrder{{$order->id}}"
+                                                     data-bs-parent="#order{{$order->id}}">
                                                     <table class="table table-sm table-bordered bg-light m-2 w-80">
                                                         <thead>
                                                         <tr>
@@ -91,8 +98,12 @@
                                                             <tr>
                                                                 <td>{{ $orderItem->product->product_name }}</td>
                                                                 <td>{{ $orderItem->quantity }}</td>
-                                                                <td>{{ number_format(round($orderItem->product->unit_price), 0, ',', ' ') }} FC</td>
-                                                                <td>{{ number_format(round($orderItem->line_price), 0, ',', ' ') }} FC</td>
+                                                                <td>{{ number_format(round($orderItem->product->unit_price), 0, ',', ' ') }}
+                                                                    FC
+                                                                </td>
+                                                                <td>{{ number_format(round($orderItem->line_price), 0, ',', ' ') }}
+                                                                    FC
+                                                                </td>
                                                             </tr>
                                                         @endforeach
                                                         </tbody>
@@ -137,27 +148,26 @@
                                        placeholder="Rechercher un produit"
                                        wire:model="search">
                                 <div style="max-height: 200px; overflow-y: auto;">
-                                    <table class="table">
+                                    <table class="table table-striped">
                                         <thead>
                                         <tr>
                                             <th scope="col">Produit</th>
                                             <th scope="col">P V/U</th>
                                             <th scope="col">stock</th>
-                                            <th scope="col">Qté</th>
                                             <th scope="col">Action</th>
+                                            <th scope="col"></th>
 
                                         </tr>
                                         </thead>
                                         <tbody>
                                         @foreach ($products as $product)
+
                                             <tr>
-                                                <td>{{ $product->product_name }}</td>
-                                                <td>{{ number_format($product->unit_price, 0, ',', ' ') }} FC</td>
-                                                <td>{{ $product->supplies->last() ? $product->supplies->last()->quantity_in_stock : 'Non disponible' }}</td>
-                                                <td class="w-50">
+                                                <td colspan="3">
                                                     <input type="number" min="1"
                                                            max="{{ $product->supplies->last() ? $product->supplies->last()->quantity_in_stock : 0 }}"
-                                                           class="form-control" id="quantity{{ $product->id }}" style="width:100%!important;">
+                                                           class="form-control" id="quantity{{ $product->id }}"
+                                                           style="width:100%!important;" placeholder="Qté Ex: 50">
                                                 </td>
                                                 <td>
                                                     <button class="btn btn-primary btn-sm"
@@ -165,6 +175,13 @@
                                                         <i class="bi bi-cart-plus-fill"></i>
                                                     </button>
                                                 </td>
+                                            </tr>
+                                            <tr>
+                                                <td>{{ $product->product_name }}</td>
+                                                <td colspan="2">{{ number_format($product->unit_price, 0, ',', ' ') }}
+                                                    FC
+                                                </td>
+                                                <td>{{ $product->supplies->last() ? $product->supplies->last()->quantity_in_stock : 'Non disponible' }}</td>
                                             </tr>
 
                                         @endforeach

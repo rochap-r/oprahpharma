@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title','Gestion de Produits pharmaceutiques')
+@section('title','Gestion de Produits')
 @push('style')
     {{-- CSS complementaires --}}
 @endpush

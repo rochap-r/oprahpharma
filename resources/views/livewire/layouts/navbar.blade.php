@@ -35,22 +35,32 @@
                 <li class="menu-section-title text-gray ff-heading fs-16 fw-bold text-uppercase mt-4 mb-2">
                     <span>Statistiques</span>
                 </li>
-                <li class="menu-item"><a href="{{ route('app.report.index') }}"><span class="nav-icon flex-shrink-0 text-warning"><i
-                                class="bi bi-pie-chart-fill  fs-18" style="font-size: 36px;"></i></span> <span
-                            class="nav-text">Rapports</span></a></li>
+                <li class="menu-item menu-item-has-children "><a href="#">
+                        <span
+                            class="nav-icon flex-shrink-0">
+                            <i class="bi bi-pie-chart-fill text-warning" style="font-size: 36px;"></i>
+                        </span> <span
+                            class="nav-text">Rapports</span></a>
+                    <ul class="sub-menu">
+                        <li class="menu-item"><a href="{{ route('app.report.index') }}">Rapport vente</a></li>
+                        <li class="menu-item"><a href="{{ route('app.report.stock-report') }}">Rapport stock</a></li>
+                    </ul>
+                    <span class='submenu-opener'><i class='bi bi-chevron-right'></i></span>
+                </li>
 
 
                 <li class="menu-section-title text-gray ff-heading fs-16 fw-bold text-uppercase mt-4 mb-2">
                     <span>GESTIONS</span>
                 </li>
 
-                <li class="menu-item menu-item-has-children "><a href="#"><span
+                <li class="menu-item menu-item-has-children "><a href="#">
+                        <span
                             class="nav-icon flex-shrink-0">
                             <i class="bi bi-bag-plus-fill text-info" style="font-size: 36px;"></i>
-</span> <span
+                        </span> <span
                             class="nav-text">Gestions</span></a>
                     <ul class="sub-menu">
-                        <li class="menu-item"><a href="{{ route('app.unit.index') }}">Unité de mesuré</a></li>
+                        <li class="menu-item"><a href="{{ route('app.unit.index') }}">Unité de mesure</a></li>
                         <li class="menu-item"><a href="{{ route('app.product.index') }}">Produits</a></li>
                         <li class="menu-item"><a href="{{ route('app.supply.index') }}">Approvisionnement</a></li>
                     </ul>

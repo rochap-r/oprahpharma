@@ -13,7 +13,7 @@
                             <input type="text" name="search" class=" bg-white form-control" placeholder="Search">
                             <button type="submit" class="btn"><img src="assets/img/svg/search.svg" alt=""></button>
                         </form>
-                        <a class="btn btn-sm btn-primary" href="#" data-bs-toggle="modal"
+                        <a class="btn btn-sm btn-soft-primary" href="#" data-bs-toggle="modal"
                            data-bs-target="#unit_modal">
                             <!-- Download SVG icon from http://tabler-icons.io/i/settings -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24"
@@ -23,7 +23,18 @@
                                 <path d="M12 5l0 14"></path>
                                 <path d="M5 12l14 0"></path>
                             </svg>
-                            Nouvelle Unité de mésure
+                            Nouvelle Unité
+                        </a>
+                        <a class="btn btn-sm btn-soft-success" href="{{ route('app.product.index') }}">
+                            <!-- Download SVG icon from http://tabler-icons.io/i/settings -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24"
+                                 height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                 stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <path d="M12 5l0 14"></path>
+                                <path d="M5 12l14 0"></path>
+                            </svg>
+                            Nouveau Produit
                         </a>
                     </div>
                 </div>
@@ -130,15 +141,24 @@
                                wire:model='unit_name' placeholder="Saisissez une nouvelle unité de mesure">
                         <span class="text-danger">@error('unit_name'){{ $message }}@enderror</span>
                     </div>
-
-                    <div class="form-group mb-3">
-                        <label class="form-label" for="unit_sigle">Unité de mésure</label>
-                        <input type="text" class="form-control" id="unit_sigle" name="unit_sigle"
-                               wire:model='unit_sigle' placeholder="Saisissez l'abréviation de la mesure">
-                        <span class="text-danger">@error('unit_sigle'){{ $message }}@enderror</span>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group mb-3">
+                                <label class="form-label" for="minimum_stock_level">Seuil minimum du stock</label>
+                                <input type="number" class="form-control" id="minimum_stock_level" name="minimum_stock_level"
+                                       wire:model='minimum_stock_level' placeholder="Tapez le seuil du stock">
+                                <span class="text-danger">@error('minimum_stock_level'){{ $message }}@enderror</span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group mb-3">
+                                <label class="form-label" for="unit_sigle">Sigle de l'Unité de mésure</label>
+                                <input type="text" class="form-control" id="unit_sigle" name="unit_sigle"
+                                       wire:model='unit_sigle' placeholder="L'abréviation de la mesure">
+                                <span class="text-danger">@error('unit_sigle'){{ $message }}@enderror</span>
+                            </div>
+                        </div>
                     </div>
-
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn me-auto" data-bs-dismiss="modal">Annuler</button>

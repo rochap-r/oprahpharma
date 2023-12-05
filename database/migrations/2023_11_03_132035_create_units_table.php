@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('unit_name');
             $table->char('unit_sigle',10);
+            $table->integer('minimum_stock_level')->default(0);
             $table->timestamps();
         });
     }
