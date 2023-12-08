@@ -20,8 +20,15 @@ class Supplies extends Component
 
     protected $listeners = [
         'resetForm',
-        'deleteSupplyAction'
+        'deleteSupplyAction',
+        'productSelected' => 'updateProductId'
     ];
+
+
+    public function updateProductId($productId)
+    {
+        $this->product_id = $productId; // Mettre à jour la propriété avec l'ID du produit
+    }
 
     public function mount()
     {

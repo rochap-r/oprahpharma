@@ -12,9 +12,11 @@
                     <div class="d-flex align-items-center gap-6">
                         <form class="search-form card-search w-auto flex-shrink-0" action="">
                             <input type="text" name="search" class=" bg-white form-control" placeholder="Search">
-                            <button type="submit" class="btn"><img src="{{ asset('assets/img/svg/search.svg') }}" alt=""></button>
+                            <button type="submit" class="btn"><img src="{{ asset('assets/img/svg/search.svg') }}"
+                                                                   alt=""></button>
                         </form>
-                        <a class="btn btn-sm btn-primary" href="#" data-bs-toggle="modal" data-bs-target="#supply_modal">
+                        <a class="btn btn-sm btn-primary" href="#" data-bs-toggle="modal"
+                           data-bs-target="#supply_modal">
                             <!-- Download SVG icon from http://tabler-icons.io/i/settings -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24"
                                  height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
@@ -23,7 +25,7 @@
                                 <path d="M12 5l0 14"></path>
                                 <path d="M5 12l14 0"></path>
                             </svg>
-                            Nouvel Appro
+                            Appro
                         </a>
 
                         <a class="btn btn-sm btn-info pl-2" href="{{ route('app.product.index') }}">
@@ -35,21 +37,21 @@
                                 <path d="M12 5l0 14"></path>
                                 <path d="M5 12l14 0"></path>
                             </svg>
-                            Nouveau Produit
+                            Produit
                         </a>
 
                         <a class="btn btn-sm btn-secondary pl-2" href="{{ route('app.supply.products') }}">
                             <!-- Download SVG icon from http://tabler-icons.io/i/settings -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home-2"
-                                 width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                                 fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                <path d="M5 12l-2 0l9 -9l9 9l-2 0"></path>
-                                <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"></path>
-                                <path d="M10 12h4v4h-4z"></path>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-eye" width="24"
+                                 height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                 stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"/>
+                                <path
+                                    d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"/>
                             </svg>
 
-                            Details Appros
+                            Appros
                         </a>
                     </div>
                 </div>
@@ -86,7 +88,9 @@
                                                 <i class="bi bi-three-dots-vertical"></i>
                                             </a>
                                             <div class="dropdown-menu p-0" style="">
-                                                <a class="dropdown-item" href="{{ route('app.supply.product',$supply->product_id) }}">Par Produit</a>
+                                                <a class="dropdown-item"
+                                                   href="{{ route('app.supply.product',$supply->product_id) }}">Par
+                                                    Produit</a>
                                                 <a class="dropdown-item"
                                                    wire:click.prevent='editSupply({{ $supply->id }})' href="#">Edit</a>
                                                 <a class="dropdown-item"
@@ -145,18 +149,9 @@
                     @endif
 
 
-                    <div class="form-group">
-                        <label for="product_id">Produit</label>
-                        <select name="product_id" id="product_id" class="form-control" wire:model="product_id">
-                            <option value="">Sélectionner un produit</option>
-                            @foreach(App\Models\Product::orderBy('product_name','asc')->select([
-                                'id','product_name','unit_price'])->get() as $product)
-                                <option value="{{ $product->id }}">{{ $product->product_name }}   {{ number_format(round($product->unit_price), 0, ',', ' ') }} FC</option>
-                            @endforeach
-                        </select>
+                    @livewire('apps.product-select')
 
-                        <span class="text-danger">@error('product_id'){{ $message }}@enderror</span>
-                    </div>
+                    <input type="hidden" wire:model="product_id" name="product_id">
 
 
                     <div class="row">

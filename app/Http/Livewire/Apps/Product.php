@@ -83,12 +83,11 @@ class Product extends Component
     {
         if ($this->selected_id){
             $this->validate([
-                'product_name'=>'required|unique:products,product_name,'.$this->selected_id,
+                'product_name'=>'required',
                 'unit_price' => 'required|numeric|min:0',
                 'unit_id' => 'required',
             ], [
                 'product_name.required'=>'le nom du produit est obligatoire',
-                'product_name.unique'=>'Ce produit existe déjà veuillez réessayez un autre!',
 
                 'unit_price.required' => 'Le prix d\'achat unitaire est obligatoire.',
                 'unit_price.numeric' => 'Le prix d\'achat unitaire doit être un nombre.',

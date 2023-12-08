@@ -20,7 +20,7 @@
                                 <path d="M12 5l0 14"></path>
                                 <path d="M5 12l14 0"></path>
                             </svg>
-                            Nouveau Appro
+                            Appro
                         </a>
 
                         <a class="btn btn-sm btn-info pl-2" href="{{ route('app.product.index') }}">
@@ -32,7 +32,7 @@
                                 <path d="M12 5l0 14"></path>
                                 <path d="M5 12l14 0"></path>
                             </svg>
-                            Nouveau Produit
+                            Produit
                         </a>
                         <a class="btn btn-sm btn-secondary pl-2" href="{{ route('app.supply.index') }}">
                             <!-- Download SVG icon from http://tabler-icons.io/i/settings -->
@@ -143,18 +143,9 @@
                     @endif
 
 
-                    <div class="form-group">
-                        <label for="product_id">Produit</label>
-                        <select name="product_id" id="product_id" class="form-control" wire:model="product_id">
-                            <option value="">Sélectionner un produit</option>
-                            @foreach(App\Models\Product::orderBy('product_name','asc')->select([
-                                'id','product_name','unit_price'])->get() as $product)
-                                <option value="{{ $product->id }}">{{ $product->product_name }}   {{ number_format(round($product->unit_price), 0, ',', ' ') }} FC</option>
-                            @endforeach
-                        </select>
+                    @livewire('apps.product-select')
 
-                        <span class="text-danger">@error('product_id'){{ $message }}@enderror</span>
-                    </div>
+                    <input type="hidden" wire:model="product_id" name="product_id">
 
 
                     <div class="row">

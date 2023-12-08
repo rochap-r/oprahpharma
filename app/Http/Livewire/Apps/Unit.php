@@ -74,7 +74,7 @@ class Unit extends Component
         $this->unit_name=$unit->unit_name;
         $this->unit_sigle=$unit->unit_sigle;
         $this->minimum_stock_level=$unit->minimum_stock_level;
-        $this->updateProductMode=true;
+        $this->updateUnitMode=true;
         $this->resetErrorBag();
         $this->dispatchBrowserEvent('showEditUnitModal');
     }
@@ -88,11 +88,11 @@ class Unit extends Component
                 'minimum_stock_level' => 'required|integer',
             ], [
                 'minimum_stock_level.required' => 'Le seuil de stock est obligatoire, mettez même 0 sauf un vide.',
+                'unit_name.unique' => 'Ce nom d\'unité est déjà utilisé.',
+                'unit_sigle.unique' => 'Ce sigle d\'unité est déjà utilisé.',
                 'minimum_stock_level.integer' => 'Le seuil de stock doit être un nombre entier.',
                 'unit_name.required' => 'le nom dé l\'unité de mesure est obligatoire',
-                'unit_name.unique' => 'ce nom de l\'unité de mesure existe déjà veuillez réessayez un autre!',
                 'unit_sigle.required' => 'l\'abréviation de l\'unité de mesure est obligatoire',
-                'unit_sigle.unique' => 'l\'abréviation de l\'unité de mesure existe déjà veuillez réessayez un autre!',
                 'unit_sigle.max' => 'l\'abréviation de l\'unité de mesure ne doit pas dépasser 10 caractères',
             ]);
 

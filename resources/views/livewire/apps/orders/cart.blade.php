@@ -161,30 +161,38 @@
                                         </thead>
                                         <tbody>
                                         @foreach ($products as $product)
+                                            @php
+                                                $lastSupply = $product->supplies->last();
+                                                $currentStock = $lastSupply ? $lastSupply->quantity_in_stock : 0;
+                                                $minimumStockLevel = $product->unit->minimum_stock_level;
+                                                $stockStateClass = $currentStock < $minimumStockLevel ? 'text-danger' : 'text-success';
+                                            @endphp
 
-                                            <tr>
-                                                <td colspan="3">
-                                                    <input type="number" min="1"
-                                                           max="{{ $product->supplies->last() ? $product->supplies->last()->quantity_in_stock : 0 }}"
-                                                           class="form-control" id="quantity{{ $product->id }}"
-                                                           style="width:100%!important;" placeholder="Qté Ex: 50">
-                                                </td>
-                                                <td>
-                                                    <button class="btn btn-primary btn-sm"
-                                                            wire:click="addToCart({{ $product->id }}, document.getElementById('quantity{{ $product->id }}').value)">
-                                                        <i class="bi bi-cart-plus-fill"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
+                                            @if($lastSupply && $lastSupply->quantity_in_stock > 0)
+                                                <tr>
+                                                    <td colspan="3">
+                                                        <input type="number" min="1"
+                                                               max="{{ $lastSupply->quantity_in_stock }}"
+                                                               class="form-control" id="quantity{{ $product->id }}"
+                                                               style="width:100%!important;" placeholder="Qté Ex: 50">
+                                                    </td>
+                                                    <td>
+                                                        <button class="btn btn-primary btn-sm"
+                                                                wire:click="addToCart({{ $product->id }}, document.getElementById('quantity{{ $product->id }}').value)">
+                                                            <i class="bi bi-cart-plus-fill"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            @endif
                                             <tr>
                                                 <td>{{ $product->product_name }}</td>
-                                                <td colspan="2">{{ number_format($product->unit_price, 0, ',', ' ') }}
-                                                    FC
+                                                <td colspan="2">{{ number_format($product->unit_price, 0, ',', ' ') }} FC</td>
+                                                <td class="{{ $stockStateClass }}">
+                                                    {{ $lastSupply ? $lastSupply->quantity_in_stock : 'Non Dispo' }}
                                                 </td>
-                                                <td>{{ $product->supplies->last() ? $product->supplies->last()->quantity_in_stock : 'Non disponible' }}</td>
                                             </tr>
-
                                         @endforeach
+
                                         </tbody>
                                     </table>
                                 </div>

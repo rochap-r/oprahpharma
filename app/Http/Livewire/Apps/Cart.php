@@ -259,14 +259,12 @@ class Cart extends Component
         if (!empty($this->search)) {
 
             $products = Product::where('product_name', 'like', "%{$this->search}%")
-                ->whereHas('supplies', function ($query) {
-                    $query->where('quantity_in_stock', '>', 0);
-                })
                 ->with(['supplies' => function ($query) {
-                    $query->where('quantity_in_stock', '>', 0)
+                    $query->where('quantity_in_stock', '>=', 0)
                         ->orderBy('supply_date', 'desc');
-                }])
+                }, 'unit'])
                 ->get();
+
         }
         $today=Carbon::now('Africa/Lubumbashi')->format('Y-m-d');
 
