@@ -9,7 +9,7 @@
                     <ul class="list-group">
                         @foreach($products as $product)
                             <li class="list-group-item" wire:click="selectProduct({{ $product->id }})">
-                                {{ $product->product_name }}|{{ $product->unit_sigle  }} - {{ number_format(round($product->unit_price), 0, ',', ' ') }} FC
+                                {{ $product->product_name }} - {{ number_format(round($product->unit_price), 0, ',', ' ') }} FC
                             </li>
                         @endforeach
                     </ul>
@@ -18,7 +18,7 @@
             <div class="col-7">
                 @if($product_id)
                     <div class="selected-product text-uppercase">
-                        Produit : {{ $products->find($product_id)->product_name }}|{{ $product->unit_sigle  }} -
+                        Produit : {{ $products->find($product_id)->product_name }} -
                         {{ number_format(round($products->find($product_id)->unit_price), 0, ',', ' ') }} FC
                         <button type="button" class="btn btn-sm btn-outline-danger " wire:click.prevent="selectProduct(null)">
                             <i class="bi bi-x-circle"></i>

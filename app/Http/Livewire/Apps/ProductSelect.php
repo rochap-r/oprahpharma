@@ -26,13 +26,10 @@ class ProductSelect extends Component
 
     public function render()
     {
-        $products = \App\Models\Product::with(['unit' => function($query) {
-            $query->select('id', 'sigle');
-        }])
-            ->where('product_name', 'like', '%' . $this->search . '%')
+        $products = \App\Models\Product::where('product_name', 'like', '%' . $this->search . '%')
             ->orderBy('product_name', 'asc')
-            ->get(['id', 'product_name', 'unit_price', 'unit_id']);
-
+            ->select(['id', 'product_name', 'unit_price'])
+            ->get();
 
         return view('livewire.apps.product-select', compact('products'));
     }
