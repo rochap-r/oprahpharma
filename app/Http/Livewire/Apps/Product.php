@@ -12,7 +12,7 @@ class Product extends Component
     public $product_name,$product_description,$unit_price,$unit_id;
     public $selected_id;
 
-    public $perPage = 8;
+    public $perPage = 25;
     public $updateProductMode=false;
 
     public function mount()

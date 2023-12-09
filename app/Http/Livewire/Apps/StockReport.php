@@ -13,7 +13,7 @@ class StockReport extends Component
     use WithPagination;
 
     public $selectedStatus = null;
-    public $perPage = 2;
+    public $perPage = 25;
 
     protected $paginationTheme = 'bootstrap';
 
