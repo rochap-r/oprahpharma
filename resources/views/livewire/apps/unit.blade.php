@@ -53,7 +53,7 @@
                                 <th>N°</th>
                                 <th>Unité</th>
                                 <th>Sigle</th>
-                                <th>Produits relatifs</th>
+                                <th>NB Produits</th>
                                 <th>Actions</th>
                             </tr>
                             </thead>
