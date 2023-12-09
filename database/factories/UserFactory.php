@@ -22,12 +22,12 @@ class UserFactory extends Factory
             'sname' => 'Chey',
             'lname' => 'Phil',
             'gender' => 'm',
-            'phone' => '+243895994197',
-            'email' => 'philemon@gmail.com',
+            'phone' => '+243995459631',
+            'email' => 'philemonchey@gmail.com',
             'email_verified_at' => now(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10)
-            ,'role_id'=>1,
+            ,'role_id'=>2,
         ];
     }
 

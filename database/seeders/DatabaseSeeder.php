@@ -53,6 +53,15 @@ class DatabaseSeeder extends Seeder
             'email'=>'rodriguechot@gmail.com',
             'role_id'=>2,
         ]);
+        User::factory()->create([
+            'name'=>'Kabole',
+            'sname'=>'Ngoie',
+            'lname'=>'Pegace',
+            'gender'=>'f',
+            'phone'=>'243976847423',
+            'email'=>'kabolepegace@gmail.com',
+            'role_id'=>2,
+        ]);
 
         // \App\Models\User::factory(10)->create();
 
