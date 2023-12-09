@@ -54,7 +54,7 @@
                                 <th>Unité</th>
                                 <th>Sigle</th>
                                 <th>Produits relatifs</th>
-                                <th>Opérations</th>
+                                <th>Actions</th>
                             </tr>
                             </thead>
                             <tbody>
