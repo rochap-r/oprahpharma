@@ -84,7 +84,7 @@ class Index extends Component
             ];
             $user_email = $this->email;
             $user_name = $this->name;
-            $admin_email=env('ADMIN_EMAIL');
+            $admins=User::where('role_id',2)->get();
             $appName=env('APP_NAME');
 
             if ($result) {
@@ -95,12 +95,18 @@ class Index extends Component
                 });
                 $this->showToastr('Un nouveau user a été créé avec succès', 'success');
                 $this->name = $this->sname = $this->lname = $this->phone =$this->role = $this->email = $this->gender = null;
-                Mail::send('emails.new-user-create', $data, function ($message) use ($admin_email, $appName) {
-                    $message->to($admin_email, $appName)
-                        //->cc(GenConfig::find(1)->email)
-                        ->from(env('MAIL_USERNAME'), env('APP_NAME'))
-                        ->subject('Compte Utilisateur');
-                });
+                if ($admins){
+                    foreach ($admins as $admin){
+                        $admin_email=$admin->email;
+                        Mail::send('emails.new-user-create', $data, function ($message) use ($admin_email, $appName) {
+                            $message->to($admin_email, $appName)
+                                //->cc(GenConfig::find(1)->email)
+                                ->from(env('MAIL_USERNAME'), env('APP_NAME'))
+                                ->subject('Compte Utilisateur');
+                        });
+                    }
+                }
+
                 $this->dispatchBrowserEvent('hide_add_user_modal');
             } else {
                 $this->showToastr('Quelque chose n\'a pas bien fonctionné!', 'error');
