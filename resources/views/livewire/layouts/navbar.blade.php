@@ -7,9 +7,6 @@
         <div class="logo d-flex align-items-center justify-content-between">
             <a href="{{ route('app.home') }}" class="d-flex align-items-center gap-3 flex-shrink-0">
                 <img src="{{ asset('assets/favicons/favicon.ico') }}" alt="logo">
-                <div class="position-relative flex-shrink-0">
-                    <h4>OP</h4>
-                </div>
             </a>
             <button type="button" class="kleon-vertical-nav-toggle"><i class="bi bi-list"></i></button>
         </div>
