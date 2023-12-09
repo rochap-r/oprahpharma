@@ -54,7 +54,7 @@
                                 <th>Unité</th>
                                 <th>Sigle</th>
                                 <th>NB Produits</th>
-                                <th>Actions</th>
+                                <th>Opérations</th>
                             </tr>
                             </thead>
                             <tbody>
