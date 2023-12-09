@@ -185,10 +185,10 @@
                                                 </tr>
                                             @endif
                                             <tr>
-                                                <td>{{ $product->product_name }}</td>
+                                                <td>{{ $product->product_name }}|{{ $product->unit->unit_sigle }}</td>
                                                 <td colspan="2">{{ number_format($product->unit_price, 0, ',', ' ') }} FC</td>
                                                 <td class="{{ $stockStateClass }}">
-                                                    {{ $lastSupply ? $lastSupply->quantity_in_stock : 'Non Dispo' }}
+                                                    {{ $lastSupply ? $lastSupply->quantity_in_stock : 'Non dispo' }}
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -225,7 +225,7 @@
                                             @endphp
                                             <tr>
                                                 <td>{{ $product->product_name }}</td>
-                                                <td>{{ number_format($quantity, 0, ',', ' ') }} {{ $product->unit->unit_sigle  }}</td>
+                                                <td>{{ number_format($quantity, 0, ',', ' ') }}|{{ $product->unit->unit_sigle  }}</td>
                                                 <td>{{ number_format($quantity * $product->unit_price, 0, ',', ' ') }}FC
                                                 </td>
                                                 <td>
