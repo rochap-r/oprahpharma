@@ -54,9 +54,9 @@
                                 <th>N° Produit</th>
                                 <th>Libellé</th>
                                 <th>Prix V/U</th>
-                                <th>CMD relatives</th>
-                                <th>Appro relatifs</th>
-                                <th>Opérations</th>
+                                <th>Ventes</th>
+                                <th>Appros</th>
+                                <th>Actions</th>
                             </tr>
                             </thead>
                             <tbody>
