@@ -13,6 +13,7 @@ class Product extends Component
     public $selected_id;
 
     public $perPage = 25;
+    public $search = '';
     public $updateProductMode=false;
 
     public function mount()
@@ -147,8 +148,17 @@ class Product extends Component
 
     public function render()
     {
-        return view('livewire.apps.product',[
-            'products' => Products::latest()->orderBy('id', 'asc')->withCount('orderItems', 'supplies','unit')->paginate($this->perPage),
+        $query = Products::latest()
+            ->orderBy('id', 'asc')
+            ->withCount('orderItems', 'supplies', 'unit');
+
+        if ($this->search !== '') {
+            $query->where('product_name', 'like', '%' . $this->search . '%');
+        }
+
+        return view('livewire.apps.product', [
+            'products' => $query->paginate($this->perPage),
         ]);
     }
+
 }

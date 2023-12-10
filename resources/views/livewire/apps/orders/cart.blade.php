@@ -165,30 +165,40 @@
                                                 $lastSupply = $product->supplies->last();
                                                 $currentStock = $lastSupply ? $lastSupply->quantity_in_stock : 0;
                                                 $minimumStockLevel = $product->unit->minimum_stock_level;
+                                                $price = $product->unit_price;
                                                 $stockStateClass = $currentStock < $minimumStockLevel ? 'text-danger' : 'text-success';
                                             @endphp
 
                                             @if($lastSupply && $lastSupply->quantity_in_stock > 0)
-                                                <tr>
-                                                    <td colspan="3">
-                                                        <input type="number" min="1"
-                                                               max="{{ $lastSupply->quantity_in_stock }}"
-                                                               class="form-control" id="quantity{{ $product->id }}"
-                                                               style="width:100%!important;" placeholder="Qté Ex: 50">
-                                                    </td>
-                                                    <td>
-                                                        <button class="btn btn-primary btn-sm"
-                                                                wire:click="addToCart({{ $product->id }}, document.getElementById('quantity{{ $product->id }}').value)">
-                                                            <i class="bi bi-cart-plus-fill"></i>
-                                                        </button>
-                                                    </td>
-                                                </tr>
+                                                @if($price>0)
+                                                    <tr>
+                                                        <td colspan="3">
+                                                            <input type="number" min="1"
+                                                                   max="{{ $lastSupply->quantity_in_stock }}"
+                                                                   class="form-control" id="quantity{{ $product->id }}"
+                                                                   style="width:100%!important;" placeholder="Qté Ex: 50">
+                                                        </td>
+                                                        <td>
+                                                            <button class="btn btn-primary btn-sm"
+                                                                    wire:click="addToCart({{ $product->id }}, document.getElementById('quantity{{ $product->id }}').value)">
+                                                                <i class="bi bi-cart-plus-fill"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                @endif
+
                                             @endif
                                             <tr>
                                                 <td>{{ $product->product_name }}|{{ $product->unit->unit_sigle }}</td>
-                                                <td colspan="2">{{ number_format($product->unit_price, 0, ',', ' ') }} FC</td>
+                                                <td colspan="2">
+                                                    @if($price>0)
+                                                        {{ number_format($product->unit_price, 0, ',', ' ') }} FC
+                                                    @else
+                                                    <span class="text-danger">{{ number_format($product->unit_price, 0, ',', ' ') }} FC</span>
+                                                    @endif
+                                                </td>
                                                 <td class="{{ $stockStateClass }}">
-                                                    {{ $lastSupply ? $lastSupply->quantity_in_stock : 'Non dispo' }}
+                                                    {{ $lastSupply? $lastSupply->quantity_in_stock : 'Indispo' }}
                                                 </td>
                                             </tr>
                                         @endforeach

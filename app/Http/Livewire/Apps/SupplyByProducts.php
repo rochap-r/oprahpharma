@@ -80,6 +80,7 @@ class SupplyByProducts extends Component
             $this->showToastr('La nouvelle ligne d\'approvisionnement a été enregistrée avec succès !', 'success');
             $this->product_id = $this->quantity_purchased = $this->unit_purchase_price = $this->supply_date = $this->expiration_date = null;
             $this->resetForm();
+            $this->emit('resetComponent');
         } else {
             $this->showToastr('Oups ! Quelque chose n\'a pas bien fonctionné !', 'error');
         }

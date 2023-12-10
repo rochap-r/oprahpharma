@@ -2,6 +2,8 @@
 
 namespace App\Http\Livewire\Apps;
 
+
+use Barryvdh\DomPDF\Facade\Pdf;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Product;
@@ -15,7 +17,47 @@ class StockReport extends Component
     public $selectedStatus = null;
     public $perPage = 25;
 
+    public $statuses = [
+        'Critique' => 'critical',
+        'Normal' => 'normal',
+    ];
+
     protected $paginationTheme = 'bootstrap';
+
+    /*Code de generation de rapport de stock*/
+    public function getExportData()
+    {
+        $products = Product::with(['unit', 'supplies' => function ($query) {
+            $query->latest()->first();
+        }])->get();
+
+        $products->each(function ($product) {
+            $product->stock_status = $product->calculateStockStatus();
+        });
+
+        if ($this->selectedStatus) {
+            $products = $products->filter(function ($product) {
+                return $product->stock_status == $this->selectedStatus;
+            });
+        }
+
+        return $products;
+    }
+
+    public function exportToPdf()
+    {
+        $products = $this->getExportData();
+        $pdf = PDF::loadView('livewire.apps.stock-report-pdf', [
+            'products' => $products
+        ]);
+        // Générer un nom de fichier avec la date et un identifiant unique
+        $fileName = 'rapport-de-stock-' . date('Y-m-d-His') . '.pdf';
+        return response()->streamDownload(
+            fn() => print($pdf->output()),
+            $fileName
+        );
+    }
+    /*fin pdf*/
 
     public function render()
     {
@@ -46,15 +88,10 @@ class StockReport extends Component
             ['path' => \Illuminate\Pagination\Paginator::resolveCurrentPath()] // Utilisez la méthode statique resolveCurrentPath()
         );
 
-        // Récupérez tous les statuts de stock distincts pour le menu déroulant
-        $statuses = [
-            'Critique' => 'critical',
-            'Normal' => 'normal',
-        ];
 
         return view('livewire.apps.stock-report', [
             'products' => $paginator,
-            'statuses' => $statuses
+            'statuses' => $this->statuses
         ]);
     }
 }

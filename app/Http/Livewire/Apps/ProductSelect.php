@@ -9,6 +9,17 @@ class ProductSelect extends Component
     public $search = '';
     public $product_id;
 
+    protected $listeners = [
+        'resetComponent' => 'resetComponent',
+    ];
+
+
+    public function resetComponent()
+    {
+        $this->resetErrorBag();
+        $this->product_id =$this->search= null;
+    }
+
     public function updatedSearch()
     {
         $this->product_id = null; // Réinitialiser le product_id lors d'une nouvelle recherche
@@ -28,7 +39,6 @@ class ProductSelect extends Component
     {
         $products = \App\Models\Product::where('product_name', 'like', '%' . $this->search . '%')
             ->orderBy('product_name', 'asc')
-            ->select(['id', 'product_name', 'unit_price'])
             ->get();
 
         return view('livewire.apps.product-select', compact('products'));

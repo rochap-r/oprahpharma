@@ -27,6 +27,7 @@
         // Réinitialisation du formulaire dans la modale
         $('#supply_modal').on('hidden.bs.modal', function (e) {
             Livewire.emit('resetSupplyForm');
+            Livewire.emit('resetComponent');
         });
 
         function handleProductInput(event) {

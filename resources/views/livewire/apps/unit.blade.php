@@ -10,7 +10,7 @@
                     <h4 class="mb-0 text-uppercase">Liste d'unités de mésure'</h4>
                     <div class="d-flex align-items-center gap-6">
                         <form class="search-form card-search w-auto flex-shrink-0" action="">
-                            <input type="text" name="search" class=" bg-white form-control" placeholder="Search">
+                            <input type="text" name="search" class=" bg-white form-control" wire:model="search" placeholder="Rechercher une unité...">
                             <button type="submit" class="btn"><img src="assets/img/svg/search.svg" alt=""></button>
                         </form>
                         <a class="btn btn-sm btn-soft-primary" href="#" data-bs-toggle="modal"

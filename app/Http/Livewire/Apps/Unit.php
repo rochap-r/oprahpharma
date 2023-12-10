@@ -13,6 +13,8 @@ class Unit extends Component
     public $selected_id;
 
     public $perPage = 8;
+
+    public $search = '';
     public $updateUnitMode=false;
 
     public function mount()
@@ -151,8 +153,15 @@ class Unit extends Component
     }
     public function render()
     {
-        return view('livewire.apps.unit',[
-            'units' => Units::latest()->orderBy('id', 'asc')->withCount('products')->paginate($this->perPage),
+        $unitsQuery = Units::latest()->orderBy('id', 'asc')->withCount('products');
+
+        if ($this->search !== '') {
+            $unitsQuery->where('unit_name', 'like', '%' . $this->search . '%');
+        }
+
+        return view('livewire.apps.unit', [
+            'units' => $unitsQuery->paginate($this->perPage),
         ]);
     }
+
 }

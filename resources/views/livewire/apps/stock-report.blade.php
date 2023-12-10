@@ -13,8 +13,10 @@
                 <button type="submit" class="btn btn-primary">Filtrer</button>
             </div>
         </form>
+        {{-- Bouton d'exportation en PDF --}}
+        <button wire:click="exportToPdf" class="btn btn-sm btn-success">Exporter en PDF</button>
 
-        <table class="table table-bordered">
+        <table class="table table-bordered mt-2">
             <thead>
             <tr>
                 <th>Produit</th>
@@ -47,9 +49,12 @@
             </tbody>
         </table>
         {{-- Ajoutez la pagination ici --}}
-        <div class="d-flex">
-            {{ $products->links() }}
-        </div>
+        @if(!isset($exportingToPdf))
+            {{-- Affichez la pagination uniquement si ce n'est pas pour l'exportation PDF --}}
+            <div class="d-flex">
+                {{ $products->links() }}
+            </div>
+        @endif
     </div>
 
 </div>

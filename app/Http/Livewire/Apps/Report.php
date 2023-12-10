@@ -16,8 +16,9 @@ class Report extends Component
 
     public function mount()
     {
-        $this->startDate = Carbon::now()->startOfDay()->format('Y-m-d H:i:s');
-        $this->endDate = Carbon::now()->endOfDay()->format('Y-m-d H:i:s');
+        $this->startDate = Carbon::now('Africa/Lubumbashi')->startOfDay()->format('Y-m-d H:i:s');
+        $this->endDate = Carbon::now('Africa/Lubumbashi')->endOfDay()->format('Y-m-d H:i:s');
+
 
         $this->userId = null;
     }
@@ -65,7 +66,7 @@ class Report extends Component
 
 
         $grossMarginValue = $totalRevenue - $cmv;
-        $grossMarginPercentage = $totalRevenue > 0 ? (($grossMarginValue / $totalRevenue) * 100) : 0;
+        $grossMarginPercentage = $totalRevenue > 0 ? (($grossMarginValue / $cmv) * 100) : 0;
 
         return view('livewire.apps.report', [
             'totalRevenue' => $totalRevenue,
