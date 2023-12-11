@@ -16,9 +16,8 @@ class Report extends Component
 
     public function mount()
     {
-        $this->startDate = Carbon::now('Africa/Lubumbashi')->startOfDay()->format('Y-m-d H:i:s');
-        $this->endDate = Carbon::now('Africa/Lubumbashi')->endOfDay()->format('Y-m-d H:i:s');
-
+        $this->startDate = Carbon::now()->startOfDay()->format('Y-m-d H:i:s');
+        $this->endDate = Carbon::now()->endOfDay()->format('Y-m-d H:i:s');
 
         $this->userId = null;
     }
