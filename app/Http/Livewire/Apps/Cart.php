@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Apps;
 
 use App\Models\Journal;
+use App\Models\OrderJournal;
 use Carbon\Carbon;
 use DateTimeZone;
 use Illuminate\Support\Facades\Auth;
@@ -138,6 +139,7 @@ class Cart extends Component
                 $order = $this->createOrder();
                 $totalPrice = $this->createOrderItems($order);
                 $this->updateOrderTotalPrice($order, $totalPrice);
+                $this->updateOrderJournal($order);
                 $this->clearCart();
                 $this->showSuccessMessage();
             });
@@ -208,7 +210,7 @@ class Cart extends Component
                 'supply_id' => $supply->id,
                 'quantity' => $decrementQuantity,
                 'unit_purchase_price' => $supply->unit_purchase_price,
-                'supply_date' => $supply->supply_date,
+                'supply_date' => $orderItem->order->order_date,
             ]);
 
             $quantity -= $decrementQuantity;
@@ -229,6 +231,18 @@ class Cart extends Component
     {
         $order->update([
             'total_price' => $totalPrice
+        ]);
+    }
+
+    private function updateOrderJournal($order)
+    {
+        foreach ($order->orderItems as $orderItem)
+        // Create a new Journal
+        OrderJournal::create([
+            'order_item_id' => $orderItem->id,
+            'quantity' => $orderItem->quantity,
+            'line_price' => $orderItem->line_price,
+            'order_date' => $order->order_date,
         ]);
     }
 
@@ -266,7 +280,7 @@ class Cart extends Component
                 ->get();
 
         }
-        $today=Carbon::now('Africa/Lubumbashi')->format('Y-m-d');
+        $today=Carbon::now('Africa/Lubumbashi')->format('d-m-Y');
 
         return view('livewire.apps.orders.cart', [
             'products' => $products,

@@ -54,7 +54,7 @@
                 <div class="card text-white bg-success overflow-hidden   h-75">
                     <div class="card-body">
                         <h5 class="card-title text-uppercase">Marge brute %</h5>
-                        <p class="card-text fs-2 fw-bold">{{ round($grossMarginPercentage) }}%</p>
+                        <p class="card-text fs-2 fw-bold">{{ number_format($grossMarginPercentage, 2, ',', '') }}%</p>
                     </div>
                 </div>
             </div>
