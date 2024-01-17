@@ -41,6 +41,7 @@
                     <ul class="sub-menu">
                         <li class="menu-item"><a href="{{ route('app.report.index') }}">Rapport vente</a></li>
                         <li class="menu-item"><a href="{{ route('app.report.stock-report') }}">Rapport stock</a></li>
+                        <li class="menu-item"><a href="{{ route('app.report.expiration-report') }}">Rapport Péremption</a></li>
                     </ul>
                     <span class='submenu-opener'><i class='bi bi-chevron-right'></i></span>
                 </li>

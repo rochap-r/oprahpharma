@@ -58,7 +58,6 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-4">
                 <div class="card text-white bg-success overflow-hidden h-75">
                     <div class="card-body">
                         <h5 class="card-title text-uppercase">CMV</h5>

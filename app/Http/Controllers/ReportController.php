@@ -15,4 +15,8 @@ class ReportController extends Controller
     {
         return view('apps.reports.stock-report');
     }
+    public function ExpirationReport()
+    {
+        return view('apps.reports.expiration-report');
+    }
 }

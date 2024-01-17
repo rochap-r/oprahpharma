@@ -38,6 +38,7 @@ Route::prefix('app')->name('app.')->middleware(['auth','check_permissions'])->gr
     Route::get('/order.index',[OrderController::class,'index'])->name('order.index');
     Route::get('/report.index',[ReportController::class,'index'])->name('report.index');
     Route::get('/report.stock-report',[ReportController::class,'StockReport'])->name('report.stock-report');
+    Route::get('/report.expiration-report',[ReportController::class,'ExpirationReport'])->name('report.expiration-report');
 
 });
 

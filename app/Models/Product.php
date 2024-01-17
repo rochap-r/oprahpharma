@@ -6,6 +6,7 @@ use App\Models\Supply;
 use App\Models\OrderItem;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Carbon;
 
 class Product extends Model
 {
@@ -47,4 +48,27 @@ class Product extends Model
     {
         return $this->where('product_name', 'like', "%{$productName}%")->get();
     }
+
+    //Instruction d'expiration des produits en stock
+    public function getExpiringSupplies(): \Illuminate\Database\Eloquent\Collection
+    {
+        $oneMonthFromNow = Carbon::now()->addMonth();
+
+        return $this->supplies()
+            ->where('expiration_date', '<=', $oneMonthFromNow)
+            ->where('quantity_in_stock','<>',0)
+            ->orderBy('expiration_date','DESC') // FIFO
+            ->get();
+    }
+
+    public static function getCriticalProducts(): \Illuminate\Database\Eloquent\Collection
+    {
+        $oneMonthFromNow = Carbon::now()->addMonth();
+
+        return self::whereHas('supplies', function ($query) use ($oneMonthFromNow) {
+            $query->where('expiration_date', '<=', $oneMonthFromNow)
+            ->where('quantity_in_stock','<>',0);
+        })->get();
+    }
+
 }

@@ -15,6 +15,7 @@ class StockReport extends Component
     use WithPagination;
 
     public $selectedStatus = null;
+    public $totalProducts = 0;
     public $perPage = 25;
 
     public $statuses = [
@@ -48,7 +49,8 @@ class StockReport extends Component
     {
         $products = $this->getExportData();
         $pdf = PDF::loadView('livewire.apps.stock-report-pdf', [
-            'products' => $products
+            'products' => $products,
+            'totalProducts'=>$products->count(),
         ]);
         // Générer un nom de fichier avec la date et un identifiant unique
         $fileName = 'rapport-de-stock-' . date('Y-m-d-His') . '.pdf';
@@ -88,10 +90,11 @@ class StockReport extends Component
             ['path' => \Illuminate\Pagination\Paginator::resolveCurrentPath()] // Utilisez la méthode statique resolveCurrentPath()
         );
 
+        $this->totalProducts=$products->count();
 
         return view('livewire.apps.stock-report', [
             'products' => $paginator,
-            'statuses' => $this->statuses
+            'statuses' => $this->statuses,
         ]);
     }
 }
