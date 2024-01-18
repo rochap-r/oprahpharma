@@ -4,7 +4,7 @@
     <div class="row ">
         <div class="card border-0">
             <div
-                class="card-header p-5 pb-0 bg-transparent border-0 d-flex align-items-center justify-content-between gap-3 flex-wrap">
+                class="card-header p-2 pb-0 bg-transparent border-0 d-flex align-items-center justify-content-between gap-3 flex-wrap">
                 <div
                     class="card-header p-5 pb-0 bg-transparent border-0 d-flex align-items-center justify-content-between gap-3 flex-wrap"
                     style="overflow-x: hidden; width: 100%;">
