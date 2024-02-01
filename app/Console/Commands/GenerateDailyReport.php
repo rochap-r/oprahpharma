@@ -36,8 +36,8 @@ class GenerateDailyReport extends Command
     {
         parent::__construct(); // Appelle le constructeur de la classe parente
 
-        $this->startDate = Carbon::now()->startOfDay()->format('Y-m-d\TH:i');
-        $this->endDate = Carbon::now()->endOfDay()->format('Y-m-d\TH:i');
+        $this->startDate = Carbon::now()->startOfDay()->subDay()->format('Y-m-d\TH:i');
+        $this->endDate = Carbon::now()->endOfDay()->subDay()->format('Y-m-d\TH:i');
     }
 
 
@@ -52,7 +52,7 @@ class GenerateDailyReport extends Command
 
 
         if ($this->startDate && $this->endDate) {
-            if ($this->startDate<=$this->endDate) {
+            if ($this->startDate <= $this->endDate) {
                 $query->whereBetween('supply_date', [$this->startDate, $this->endDate]);
                 $orderQuery->whereBetween('order_date', [$this->startDate, $this->endDate]);
             }
@@ -72,37 +72,37 @@ class GenerateDailyReport extends Command
             ->join('orders', 'users.id', '=', 'orders.user_id')
             ->join('order_items', 'orders.id', '=', 'order_items.order_id')
             ->whereBetween('orders.order_date', [$this->startDate, $this->endDate])
-            ->groupBy('users.id', 'users.name') 
+            ->groupBy('users.id', 'users.name')
             ->get();
 
 
         $orders = $orderJournals->map(function ($journal) {
             return $journal->orderItem->order;
         })->unique();
-        $orderCount =count($orders);
+        $orderCount = count($orders);
 
-        $cmv = $journals->sum(function ($journal) { return $journal->unit_purchase_price * $journal->quantity; });
+        $cmv = $journals->sum(function ($journal) {
+            return $journal->unit_purchase_price * $journal->quantity;
+        });
         $grossMargin = $salesRevenue - $cmv;
-        $grossMarginPercentage = $grossMargin? number_format(($grossMargin / $salesRevenue) * 100, 2, ',', ''): 0;
+        $grossMarginPercentage = $grossMargin ? number_format(($grossMargin / $salesRevenue) * 100, 2, ',', '') : 0;
 
         $products = Product::all();
-        $nb=0;
-        foreach($products as $product){
+        $nb = 0;
+        foreach ($products as $product) {
             $lastSupply = $product->supplies()->latest()->first();
 
             if (!$lastSupply || $lastSupply->quantity_in_stock <= $product->unit->minimum_stock_level) {
                 $nb++;
             }
-
-
         }
-        $criticalStock=$nb;
+        $criticalStock = $nb;
 
         // date du rapport
-        $today= Carbon::now('Africa/Lubumbashi')->format('d-m-Y');
+        $today = Carbon::now('Africa/Lubumbashi')->format('d-m-Y');
 
         //les produits à 30 jours ou moins d'expiration
-        $criticalExpirations=Product::getCriticalProducts()->count();
+        $criticalExpirations = Product::getCriticalProducts()->count();
 
 
 
@@ -132,10 +132,5 @@ class GenerateDailyReport extends Command
                 $criticalExpirations,
                 $salesByusers
             ));
-
-
-
-
     }
-
 }
