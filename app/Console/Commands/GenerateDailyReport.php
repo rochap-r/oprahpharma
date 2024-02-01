@@ -72,8 +72,9 @@ class GenerateDailyReport extends Command
             ->join('orders', 'users.id', '=', 'orders.user_id')
             ->join('order_items', 'orders.id', '=', 'order_items.order_id')
             ->whereBetween('orders.order_date', [$this->startDate, $this->endDate])
-            ->groupBy('users.id')
+            ->groupBy('users.id', 'users.name') 
             ->get();
+
 
         $orders = $orderJournals->map(function ($journal) {
             return $journal->orderItem->order;
