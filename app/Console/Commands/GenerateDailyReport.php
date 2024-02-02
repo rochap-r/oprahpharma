@@ -99,7 +99,7 @@ class GenerateDailyReport extends Command
         $criticalStock = $nb;
 
         // date du rapport
-        $today = Carbon::now('Africa/Lubumbashi')->format('d-m-Y');
+        $today = Carbon::now('Africa/Lubumbashi')->subDay()->format('d-m-Y');
 
         //les produits à 30 jours ou moins d'expiration
         $criticalExpirations = Product::getCriticalProducts()->count();
