@@ -40,7 +40,6 @@
                     </div>
                 </div>
 
-
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="defaultTable text-center w-100">
@@ -60,9 +59,9 @@
                             @forelse($supplies as $supply)
                                 <tr>
                                     <td>{{ $i++ }}</td>
-                                    <td>{{ $supply->product->product_name }}</td>
+                                    <td>{{ $supply->product_name }}</td>
                                     <td>{{ number_format(round($supply->unit_purchase_price), 0, ',', ' ') }} FC</td>
-                                    <td>{{ $supply->quantity_in_stock }} : {{ $supply->product->unit->unit_sigle }}</td>
+                                    <td>{{ $supply->quantity_in_stock }} : {{ $supply->unit_sigle }}</td>
                                     <td>{{ \Carbon\Carbon::parse($supply->supply_date)->format('d-m-Y') }}</td>
                                     <td>{{ $supply->expiration_date }}</td>
                                     <td>
@@ -73,6 +72,11 @@
                                             </a>
                                             <div class="dropdown-menu p-0" style="">
                                                 <a class="dropdown-item" href="{{ route('app.supply.products') }}">Voir plus</a>
+                                                <a class="dropdown-item"
+                                                   wire:click.prevent='editSupply({{ $supply->id }})' href="#">Edit</a>
+                                                <a class="dropdown-item"
+                                                   wire:click.prevent="deleteSupply({{ $supply->id }})"
+                                                   href="#">Delete</a>
                                             </div>
                                         </div>
                                     </td>
@@ -95,13 +99,91 @@
                     </div>
                 </div>
 
-
             </div>
 
 
         </div>
 
     </div>
+
+    <!-- model de creation et mise à jour des categories !-->
+    <div wire:ignore.self class="modal modal-blur fade modal-lg" id="supply_modal" tabindex="-1" aria-hidden="true"
+         style="display: none;"
+         data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <form class="modal-content" method="POST"
+                  @if($updateSupplyMode) wire:submit.prevent='updateSupply()'
+                  @else wire:submit.prevent='addSupply()' @endif >
+
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ $updateSupplyMode? "Mise à jour de la ligne d'approvisionnement N° ".$selected_id."":'Création d\'une nouvelle ligne d\'approvisionnement' }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @csrf
+
+                    @if($updateSupplyMode===true)
+
+                        <input type="hidden" wire:model='selected_id'>
+                    @endif
+
+
+                    @livewire('apps.product-select')
+
+                    <input type="hidden" wire:model="product_id" name="product_id">
+
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label class="form-label" for="unit_purchase_price">Prix d'achat unitaire</label>
+                                <input type="number" class="form-control" id="unit_purchase_price"
+                                       name="unit_purchase_price"
+                                       wire:model='unit_purchase_price'
+                                       placeholder="Saisissez le prix d'achat unitaire">
+                                <span class="text-danger">@error('unit_purchase_price'){{ $message }}@enderror</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label class="form-label" for="quantity_purchased">Quantité achetée</label>
+                                <input type="number" class="form-control" id="quantity_purchased"
+                                       name="quantity_purchased"
+                                       wire:model='quantity_purchased' placeholder="Saisissez la quantité achetée">
+                                <span class="text-danger">@error('quantity_purchased'){{ $message }}@enderror</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label class="form-label" for="supply_date">Date d'achat</label>
+                                <input type="date" class="form-control" id="supply_date" name="supply_date"
+                                       wire:model='supply_date'>
+                                <span class="text-danger">@error('supply_date'){{ $message }}@enderror</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label class="form-label" for="expiration_date">Date d'expiration</label>
+                                <input type="date" class="form-control" id="expiration_date" name="expiration_date"
+                                       wire:model='expiration_date'>
+                                <span class="text-danger">@error('expiration_date'){{ $message }}@enderror</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn me-auto" data-bs-dismiss="modal">Annuler</button>
+                    <button type="submit"
+                            class="btn btn-primary">{{ $updateSupplyMode? 'Mettre à jour':'Enregistrer' }}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 
 </div>
 

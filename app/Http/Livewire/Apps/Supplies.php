@@ -180,6 +180,7 @@ class Supplies extends Component
     public function deleteSupplyAction(int $id)
     {
         $supply = Supply::find($id);
+        //dd($supply);
         if ($supply) {
             $supply->delete();
             $this->showToastr("La fourniture a été supprimée avec succès.", 'info');
@@ -192,22 +193,24 @@ class Supplies extends Component
     public function deleteSupply(int $id)
     {
         $supply = Supply::find($id);
-        $this->dispatchBrowserEvent('deleteSupply', [
-            'title' => 'Etes-vous vraiment sûr de supprimer cette ligne d\'Approvisionnement?',
-            'html' => "Suppression de la ligne d\'Appro du produit: " . $supply->product->product_name,
-            'id' => $supply->id
-        ]);
+        if ($supply || $supply->product) {
+            $this->dispatchBrowserEvent('deleteSupply', [
+                'title' => 'Etes-vous vraiment sûr de supprimer cette ligne d\'Approvisionnement?',
+                'html' => "Suppression de la ligne d\'Appro du produit: " . $supply->product->product_name,
+                'id' => $supply->id
+            ]);
+        }
     }
 
 
     public function render()
     {
-//        $supplies = DB::table('supplies')
-//            ->select(DB::raw('any_value(supplies.id) as supply_id, product_id, any_value(quantity_purchased) as quantity_purchased, any_value(unit_purchase_price) as unit_purchase_price, any_value(quantity_in_stock) as quantity_in_stock, any_value(supplies.supply_date) as supply_date, any_value(expiration_date) as expiration_date, products.*'))
-//            ->join('products', 'products.id', '=', 'supplies.product_id')
-//            ->orderBy('supply_date', 'asc')
-//            ->groupBy('product_id')
-//            ->paginate($this->perPage);
+        //        $supplies = DB::table('supplies')
+        //            ->select(DB::raw('any_value(supplies.id) as supply_id, product_id, any_value(quantity_purchased) as quantity_purchased, any_value(unit_purchase_price) as unit_purchase_price, any_value(quantity_in_stock) as quantity_in_stock, any_value(supplies.supply_date) as supply_date, any_value(expiration_date) as expiration_date, products.*'))
+        //            ->join('products', 'products.id', '=', 'supplies.product_id')
+        //            ->orderBy('supply_date', 'asc')
+        //            ->groupBy('product_id')
+        //            ->paginate($this->perPage);
 
         $latestSupplies = DB::table('supplies')
             ->select('product_id', DB::raw('MAX(id) as id'))
@@ -220,7 +223,7 @@ class Supplies extends Component
             ->join('products', 'products.id', '=', 'supplies.product_id')
             ->join('units', 'units.id', '=', 'products.unit_id')
             ->orderBy('supplies.supply_date', 'desc')
-            ->select('supplies.*', 'products.*','units.*')
+            ->select('supplies.*', 'products.*', 'units.*')
             ->paginate($this->perPage);
 
 
@@ -231,7 +234,7 @@ class Supplies extends Component
         //$supplies=Supply::latest()->orderBy('id', 'asc')->with('product')->paginate($this->perPage);
 
         return view('livewire.apps.supply.supplies', [
-            'supplies' => $supplies,]);
+            'supplies' => $supplies,
+        ]);
     }
-
 }

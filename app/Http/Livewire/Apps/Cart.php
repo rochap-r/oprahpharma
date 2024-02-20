@@ -12,7 +12,6 @@ use Livewire\Component;
 use App\Models\Product;
 use App\Models\Order;
 use App\Models\OrderItem;
-use App\Models\Supply;
 
 class Cart extends Component
 {

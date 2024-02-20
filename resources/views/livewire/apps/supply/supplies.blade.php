@@ -91,11 +91,6 @@
                                                 <a class="dropdown-item"
                                                    href="{{ route('app.supply.product',$supply->product_id) }}">Par
                                                     Produit</a>
-                                                <a class="dropdown-item"
-                                                   wire:click.prevent='editSupply({{ $supply->id }})' href="#">Edit</a>
-                                                <a class="dropdown-item"
-                                                   wire:click.prevent="deleteSupply({{ $supply->id }})"
-                                                   href="#">Delete</a>
                                             </div>
                                         </div>
                                     </td>
