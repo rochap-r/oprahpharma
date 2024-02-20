@@ -41,7 +41,6 @@ class GenerateDailyReport extends Command
     }
 
 
-
     /**
      * Execute the console command.
      */
@@ -105,8 +104,6 @@ class GenerateDailyReport extends Command
         $criticalExpirations = Product::getCriticalProducts()->count();
 
 
-
-
         // Générer le rapport ici
         $report = [
             'salesRevenue' => $salesRevenue,
@@ -120,8 +117,16 @@ class GenerateDailyReport extends Command
         ];
 
 
-        Mail::to('philemonchey@gmail.com')
-            ->cc('rodriguechot@gmail.com')
+// Récupérer les utilisateurs avec le rôle 'admin'
+        $users = User::whereHas('role', function ($query) {
+            $query->where('name', 'admin');
+        })->get();
+
+// Récupérer les adresses e-mail des utilisateurs
+        $emails = $users->pluck('email')->toArray();
+
+// Envoyer l'e-mail à ces utilisateurs
+        Mail::to($emails)
             ->send(new DailyReport(
                 $salesRevenue,
                 $orderCount,
@@ -132,5 +137,6 @@ class GenerateDailyReport extends Command
                 $criticalExpirations,
                 $salesByusers
             ));
+
     }
 }
