@@ -14,6 +14,7 @@ class Supplies extends Component
     public $product_id, $quantity_purchased, $unit_purchase_price, $supply_date, $expiration_date;
     public $quantity_in_stock = 0;
     public $selected_id;
+    public $search = '';
 
     public $perPage = 8;
     public $updateSupplyMode = false;
@@ -205,12 +206,6 @@ class Supplies extends Component
 
     public function render()
     {
-        //        $supplies = DB::table('supplies')
-        //            ->select(DB::raw('any_value(supplies.id) as supply_id, product_id, any_value(quantity_purchased) as quantity_purchased, any_value(unit_purchase_price) as unit_purchase_price, any_value(quantity_in_stock) as quantity_in_stock, any_value(supplies.supply_date) as supply_date, any_value(expiration_date) as expiration_date, products.*'))
-        //            ->join('products', 'products.id', '=', 'supplies.product_id')
-        //            ->orderBy('supply_date', 'asc')
-        //            ->groupBy('product_id')
-        //            ->paginate($this->perPage);
 
         $latestSupplies = DB::table('supplies')
             ->select('product_id', DB::raw('MAX(id) as id'))
@@ -222,9 +217,11 @@ class Supplies extends Component
             })
             ->join('products', 'products.id', '=', 'supplies.product_id')
             ->join('units', 'units.id', '=', 'products.unit_id')
+            ->where('products.product_name', 'like', '%' . $this->search . '%') // Ajoutez cette ligne
             ->orderBy('supplies.supply_date', 'desc')
             ->select('supplies.*', 'products.*', 'units.*')
             ->paginate($this->perPage);
+
 
 
 

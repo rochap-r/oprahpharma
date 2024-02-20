@@ -13,6 +13,7 @@ class SupplyByProducts extends Component
     public $product_id, $quantity_purchased, $unit_purchase_price, $supply_date, $expiration_date;
     public $quantity_in_stock = 0;
     public $selected_id;
+    public $search='';
 
     public $perPage = 8;
     public $updateSupplyMode = false;
@@ -200,7 +201,14 @@ class SupplyByProducts extends Component
 
     public function render()
     {
-        $supplies=Supply::latest()->orderBy('id', 'desc')->with('product')->paginate($this->perPage);
+        $supplies = Supply::latest()
+            ->orderBy('id', 'desc')
+            ->whereHas('product', function ($query) {
+                $query->where('product_name', 'like', '%' . $this->search . '%');
+            })
+            ->with('product')
+            ->paginate($this->perPage);
+
         return view('livewire.apps.supply.supply-by-products',[
             'supplies'=>$supplies,
         ]);

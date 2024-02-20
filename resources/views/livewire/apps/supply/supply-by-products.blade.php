@@ -10,6 +10,11 @@
                     class="card-header p-5 pb-0 bg-transparent border-0 d-flex align-items-center justify-content-between gap-3 flex-wrap">
                     <h4 class="mb-0 text-uppercase">Liste de Toutes les lignes d'Approvisionnement</h4>
                     <div class="d-flex align-items-center gap-6">
+                        <form class="search-form card-search w-auto flex-shrink-0" action="">
+                            <input type="text" name="search" class="bg-white form-control" wire:model="search" placeholder="recherche">
+                            <button type="submit" class="btn"><img src="{{ asset('assets/img/svg/search.svg') }}"
+                                                                   alt=""></button>
+                        </form>
                         <a class="btn btn-sm btn-primary" href="#" data-bs-toggle="modal"
                            data-bs-target="#supply_modal">
                             <!-- Download SVG icon from http://tabler-icons.io/i/settings -->
@@ -44,8 +49,7 @@
                                 <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"></path>
                                 <path d="M10 12h4v4h-4z"></path>
                             </svg>
-
-                            Synthèse Appros
+                            Appros
                         </a>
                     </div>
                 </div>
