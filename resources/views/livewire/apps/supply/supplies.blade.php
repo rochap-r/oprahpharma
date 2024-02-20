@@ -8,7 +8,7 @@
                 class="card-header p-5 pb-0 bg-transparent border-0 d-flex align-items-center justify-content-between gap-3 flex-wrap">
                 <div
                     class="card-header p-5 pb-0 bg-transparent border-0 d-flex align-items-center justify-content-between gap-3 flex-wrap">
-                    <h4 class="mb-0 text-uppercase">Liste d'Approvisionnement</h4>
+                    <h4 class="mb-0 text-uppercase">Résumé d'approvionnements par produit </h4>
                     <div class="d-flex align-items-center gap-6">
                         <form class="search-form card-search w-auto flex-shrink-0" action="">
                             <input type="text" name="search" class="bg-white form-control" wire:model="search" placeholder="nom du produit">
