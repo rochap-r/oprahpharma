@@ -8,8 +8,22 @@
                 <div
                     class="card-header p-1 pb-0 bg-transparent border-0 d-flex align-items-center justify-content-between gap-3 flex-wrap"
                     style="overflow-x: hidden; width: 100%;">
-                    <h4 class="mb-0 text-uppercase">Liste des commandes</h4>
+                    <h4 class="mb-0 text-uppercase">Page de Ventes</h4>
                     <div class="d-flex align-items-center">
+                        <a class="btn btn-sm btn-success" href="{{ route('app.order.register') }}">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 class="icon icon-tabler icon-tabler-baseline-density-small" width="24" height="24"
+                                 viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none"
+                                 stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M4 3h16"/>
+                                <path d="M4 9h16"/>
+                                <path d="M4 15h16"/>
+                                <path d="M4 21h16"/>
+                            </svg>
+                            Liste de commandes
+                        </a>
+
                         <a class="btn btn-sm btn-primary" href="#" data-bs-toggle="modal"
                            data-bs-target="#checkout_modal">
                             <!-- Download SVG icon from http://tabler-icons.io/i/settings -->
@@ -176,7 +190,8 @@
                                                             <input type="number" min="1"
                                                                    max="{{ $lastSupply->quantity_in_stock }}"
                                                                    class="form-control" id="quantity{{ $product->id }}"
-                                                                   style="width:100%!important;" placeholder="Qté Ex: 50">
+                                                                   style="width:100%!important;"
+                                                                   placeholder="Qté Ex: 50">
                                                         </td>
                                                         <td>
                                                             <button class="btn btn-primary btn-sm"
@@ -194,7 +209,7 @@
                                                     @if($price>0)
                                                         {{ number_format($product->unit_price, 0, ',', ' ') }} FC
                                                     @else
-                                                    <span class="text-danger">{{ number_format($product->unit_price, 0, ',', ' ') }} FC</span>
+                                                        <span class="text-danger">{{ number_format($product->unit_price, 0, ',', ' ') }} FC</span>
                                                     @endif
                                                 </td>
                                                 <td class="{{ $stockStateClass }}">
@@ -235,7 +250,8 @@
                                             @endphp
                                             <tr>
                                                 <td>{{ $product->product_name }}</td>
-                                                <td>{{ number_format($quantity, 0, ',', ' ') }}|{{ $product->unit->unit_sigle  }}</td>
+                                                <td>{{ number_format($quantity, 0, ',', ' ') }}
+                                                    |{{ $product->unit->unit_sigle  }}</td>
                                                 <td>{{ number_format($quantity * $product->unit_price, 0, ',', ' ') }}FC
                                                 </td>
                                                 <td>

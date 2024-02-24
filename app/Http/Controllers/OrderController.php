@@ -10,4 +10,9 @@ class OrderController extends Controller
     {
         return view('apps.orders.index');
     }
+
+    public function register()
+    {
+        return view('apps.orders.register');
+    }
 }
