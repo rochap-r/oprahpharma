@@ -36,6 +36,7 @@ Route::prefix('app')->name('app.')->middleware(['auth','check_permissions'])->gr
     Route::get('/supply.product/{id}',[SupplyController::class,'product'])->name('supply.product');
     Route::get('/supply.products',[SupplyController::class,'products'])->name('supply.products');
     Route::get('/order.index',[OrderController::class,'index'])->name('order.index');
+    Route::get('/checkout',[OrderController::class,'checkout'])->name('checkout');
     Route::get('/order.register',[OrderController::class,'register'])->name('order.register');
     Route::get('/report.index',[ReportController::class,'index'])->name('report.index');
     Route::get('/report.stock-report',[ReportController::class,'StockReport'])->name('report.stock-report');
