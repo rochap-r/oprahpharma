@@ -10,6 +10,9 @@
                     style="overflow-x: hidden; width: 100%;">
                     <h4 class="mb-0 text-uppercase">Page de Ventes</h4>
                     <div class="d-flex align-items-center">
+                        <a class="btn btn-sm btn-success" href="{{ route('app.checkout') }}">
+                                                        +
+                        </a>
                         <a class="btn btn-sm btn-success" href="{{ route('app.order.register') }}">
                             <svg xmlns="http://www.w3.org/2000/svg"
                                  class="icon icon-tabler icon-tabler-baseline-density-small" width="24" height="24"

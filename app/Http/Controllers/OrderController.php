@@ -15,4 +15,9 @@ class OrderController extends Controller
     {
         return view('apps.orders.register');
     }
+
+    public function checkout()
+    {
+        return view('apps.orders.checkout');
+    }
 }
