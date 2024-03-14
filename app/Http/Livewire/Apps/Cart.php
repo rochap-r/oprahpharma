@@ -21,6 +21,8 @@ class Cart extends Component
 
     public $total = 0;
 
+    public $product='';
+
     public $errorMessage = '';
 
     public $totalOrders;
@@ -80,21 +82,19 @@ class Cart extends Component
                         'quantity' => $quantity, 'quantityInStock' => $product->supplies->last()->quantity_in_stock
                     ]);
                 } else {
-                    if (isset($this->cart[$product->id])) {
-                        $this->cart[$product->id] += $quantity;
-                    } else {
-                        $this->cart[$product->id] = $quantity;
-                    }
+
+                    $this->cart[$product->id] = $quantity;
 
                     $this->total += $quantity * $product->unit_price;
                     $this->search = null;
+                    $this->dispatchBrowserEvent('hideCheckoutModal');
                 }
             }
         }
     }
 
 
-    public function handleQuantityError()
+    public function handleQuantityError(): void
     {
         $this->errorMessage = 'La quantité spécifiée est supérieure à la quantité en stock';
     }
@@ -236,14 +236,22 @@ class Cart extends Component
     private function updateOrderJournal($order)
     {
         foreach ($order->orderItems as $orderItem)
-        // Create a new Journal
-        OrderJournal::create([
-            'order_item_id' => $orderItem->id,
-            'quantity' => $orderItem->quantity,
-            'line_price' => $orderItem->line_price,
-            'order_date' => $order->order_date,
-        ]);
+            // Create a new Journal
+            OrderJournal::create([
+                'order_item_id' => $orderItem->id,
+                'quantity' => $orderItem->quantity,
+                'line_price' => $orderItem->line_price,
+                'order_date' => $order->order_date,
+            ]);
     }
+
+    public function addProductToCart(int $id)
+    {
+        $this->product = Product::findOrFail($id);
+        $this->resetErrorBag();
+        $this->dispatchBrowserEvent('showCheckoutModal');
+    }
+
 
     private function clearCart()
     {
@@ -261,8 +269,6 @@ class Cart extends Component
     }
 
 
-    //fin de ses fonctons
-
     public function render()
     {
         $products = [];
@@ -277,16 +283,15 @@ class Cart extends Component
                         ->orderBy('supply_date', 'desc');
                 }, 'unit'])
                 ->get();
-
         }
-        $today=Carbon::now('Africa/Lubumbashi')->format('d-m-Y');
+        $today = Carbon::now('Africa/Lubumbashi')->format('d-m-Y');
 
         return view('livewire.apps.orders.cart', [
             'products' => $products,
             'totalOrders' => $this->totalOrders,
             'totalAmount' => $this->totalAmount,
             'recentOrders' => $this->recentOrders,
-            'today'=>$today,
+            'today' => $today,
         ]);
     }
 }
