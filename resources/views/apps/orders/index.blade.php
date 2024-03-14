@@ -13,7 +13,7 @@
 
             .table th,
             .table td {
-                font-size: 85%;
+                font-size: 70%;
                 padding: 5px;
                 margin-top: 10px;
             }
