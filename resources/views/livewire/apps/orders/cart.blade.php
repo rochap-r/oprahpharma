@@ -38,8 +38,8 @@
                 <h2 class="my-3">Recherche Produit</h2>
                 <input id="input_search" type="text" class="form-control mb-3" placeholder="Rechercher un produit"
                        wire:model="search">
-                <div style="max-height: 200px; overflow-y: auto;">
-                    <table class="table table-striped">
+                <div style="max-height: 200px; overflow-y: auto;overflow-x: hidden; margin: 0">
+                    <table class="table table-striped table-responsive m-0">
                         <thead>
                         <tr>
                             <th scope="col">Produit</th>
@@ -117,8 +117,8 @@
                         FC</h3>
                 </div>
 
-                <div style="max-height: 200px; overflow-y: auto;">
-                    <table class="table">
+                <div style="max-height: 200px; overflow-y: auto; margin: 0">
+                    <table class="table table-responsive">
                         <thead>
                         <tr>
                             <th scope="col">Produit</th>

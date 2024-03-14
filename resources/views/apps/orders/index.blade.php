@@ -3,19 +3,17 @@
 @push('style')
     {{-- CSS complementaires --}}
     <style>
-        /* Pour les tablettes et smartphones */
-        @media only screen and (max-width: 768px) {
+        /* Pour les tablettes et smartphones avec une résolution de 800 x 1280 pixels */
+        @media only screen and (max-width: 820px)  {
             .table {
                 width: 100%;
-                max-width: 600px; /* Limite la largeur du tableau */
                 margin: 0 auto; /* Centre le tableau sur l'écran */
             }
 
             .table th,
             .table td {
-                font-size: 70%;
-                padding: 5px;
-                margin-top: 10px;
+                font-size: 12px; /* Réduit la taille de la police à 85% */
+                margin-top: 5px;
             }
 
             .table tfoot td {
@@ -23,11 +21,9 @@
             }
 
             .table tfoot button {
-                font-size: 95%;
-                padding: 10px 20px; /* Ajustez le padding pour une taille adaptée */
+                font-size: 0.95em; /* Réduit la taille de la police à 95% */
+                padding: 10px 20px; /* Ajuste le padding pour une taille adaptée */
             }
-
-
         }
     </style>
 @endpush
