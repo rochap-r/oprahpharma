@@ -16,6 +16,12 @@
 @push('script')
     <script>
 
+        //ce code bloque l'ajout au panier d'un produit avec une quantité superieur au stock
+        window.addEventListener('time-error', function(event) {
+            var supply_date = event.detail.supply_date;
+            alert('La durée d\'édition est déjà au plus de  (' + supply_date + ') heures');
+        });
+
         window.addEventListener('hideSupplyModal', function (e) {
             $('#supply_modal').modal('hide');
         });

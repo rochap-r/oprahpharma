@@ -32,9 +32,9 @@
 
     </div>
 
-    <div class="container pb-1">
+    <div class="container">
         <div class="row">
-            <div class="col-sm-12 col-xl-6 col-md-6">
+            <div class="col-sm-12 col-xl-9 col-md-9">
                 <h2 class="my-3">Recherche Produit</h2>
                 <input id="input_search" type="text" class="form-control mb-3" placeholder="Rechercher un produit"
                        wire:model="search">
@@ -110,58 +110,24 @@
 
 
             </div>
-            <div class="col-sm-12 col-xl-6 col-md-6">
-                <h2 class="my-2">Gestion Panier</h2>
-                <div class="alert alert-success">
-                    <h3 class="text-success">Total à Payer: {{ number_format($total, 0, ',', ' ') }}
-                        FC</h3>
-                </div>
-
-                <div style="max-height: 200px; overflow-y: auto; margin: 0">
-                    <table class="table table-responsive">
-                        <thead>
-                        <tr>
-                            <th scope="col">Produit</th>
-                            <th scope="col">Qté</th>
-                            <th  scope="col">Prix total</th>
-                            <th  scope="col">Action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @php $total=0 @endphp
-                        @foreach ($cart as $productId => $quantity)
-                            @php
-                                $product = \App\Models\Product::find($productId);
-                                $total += $quantity * $product->unit_price;
-                            @endphp
-                            <tr>
-                                <td>{{ $product->product_name }}</td>
-                                <td>{{ number_format($quantity, 0, ',', ' ') }}
-                                    |{{ $product->unit->unit_sigle }}</td>
-                                <td>
-                                    {{ number_format($quantity * $product->unit_price, 0, ',', ' ') }}FC
-                                </td>
-                                <td>
-                                    <button class="btn btn-danger btn-sm m-0 p-1"
-                                            wire:click="removeFromCart({{ $productId }})"
-                                            onclick="e.stopPropagation()">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                        <tfoot>
-                        <tr>
-                            <td colspan="4">
-                                <button class="btn btn-success btn-sm p-1" wire:click="checkout">Passer la
-                                    commande</button>
-                            </td>
-                        </tr>
-                        </tfoot>
-                    </table>
+            <div class="col-sm-12 col-xl-3 col-md-3">
+                <h2 class="my-2">Panier</h2>
+                <div class="d-block align-center">
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#cart_modal">
+                        <div class="alert alert-secondary">
+                            <h5 class="text-secondary text-uppercase" id="checkoutModalLabel">
+                                Total à Payer
+                            </h5>
+                            <h5 class="text-secondary text-uppercase" id="checkoutModalLabel">
+                                {{ number_format($total, 0, ',', ' ') }} FC
+                            </h5>
+                        </div>
+                    </a>
+                    <button type="submit" class="btn btn-primary btn-sm align-self-center" wire:click="checkout">Passer la commande</button>
                 </div>
             </div>
+
+
 
         </div>
     </div>
@@ -263,9 +229,13 @@
         {{-- Fin code rapport --}}
     </div>
 
+
+
+
+
     <!-- Modal -->
-    <div wire:ignore.self class="modal modal-sm fade" id="checkout_modal" tabindex="-1"
-         aria-labelledby="checkoutModalLabel" aria-hidden="true">
+    <div wire:ignore.self class="modal modal-blur fade modal-sm" id="checkout_modal" tabindex="-1" aria-hidden="true"
+        style="display:none;" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -303,6 +273,69 @@
                     <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal" aria-label="Close"
                             wire:click="resetModal"> fermer
                     </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div wire:ignore.self class="modal modal-blur fade modal-lg" id="cart_modal" tabindex="-1" aria-hidden="true"
+        style="display:none;" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-uppercase" id="checkoutModalLabel">
+                        Total à Payer: {{ number_format($total, 0, ',', ' ') }}
+                        FC
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <div style="max-height: 200px; overflow-y: auto; margin: 0">
+                        <table class="table table-responsive">
+                            <thead>
+                            <tr>
+                                <th scope="col">Produit</th>
+                                <th scope="col">Qté</th>
+                                <th  scope="col">Prix total</th>
+                                <th  scope="col">Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @php $total=0 @endphp
+                            @foreach ($cart as $productId => $quantity)
+                                @php
+                                    $product = \App\Models\Product::find($productId);
+                                    $total += $quantity * $product->unit_price;
+                                @endphp
+                                <tr>
+                                    <td>{{ $product->product_name }}</td>
+                                    <td>{{ number_format($quantity, 0, ',', ' ') }}
+                                        |{{ $product->unit->unit_sigle }}</td>
+                                    <td>
+                                        {{ number_format($quantity * $product->unit_price, 0, ',', ' ') }}FC
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-danger btn-sm m-0 p-1"
+                                                wire:click="removeFromCart({{ $productId }})"
+                                                onclick="e.stopPropagation()">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+
+
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger me-auto btn-sm"  data-bs-dismiss="modal">fermer</button>
+                        <button type="submit" class="btn btn-primary btn-sm" wire:click="checkout">Commander</button>
+                    </div>
                 </div>
 
             </div>

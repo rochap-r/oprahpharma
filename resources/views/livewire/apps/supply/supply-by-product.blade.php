@@ -8,7 +8,7 @@
                 class="card-header p-5 pb-0 bg-transparent border-0 d-flex align-items-center justify-content-between gap-3 flex-wrap">
                 <div
                     class="card-header p-5 pb-0 bg-transparent border-0 d-flex align-items-center justify-content-between gap-3 flex-wrap">
-                    <h4 class="mb-0 text-uppercase">Liste d'Approvisionnement relatif à : {{ App\Models\Product::find($productId)->product_name }}</h4>
+                    <h4 class="mb-0 text-uppercase">Liste d'Approvisionnement relatif à : {{ $product_name }}</h4>
                     <div class="d-flex align-items-center gap-6">
                         <form class="search-form card-search w-auto flex-shrink-0" action="">
                             <input type="text" name="search" class=" bg-white form-control" placeholder="Search">
@@ -42,7 +42,7 @@
 
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="defaultTable text-center w-100">
+                        <table class="defaultTable text-center w-100 h-100">
                             <thead>
                             <tr>
                                 <th>N°</th>
@@ -59,9 +59,9 @@
                             @forelse($supplies as $supply)
                                 <tr>
                                     <td>{{ $i++ }}</td>
-                                    <td>{{ $supply->product_name }}</td>
+                                    <td>{{ $supply->product->product_name }}</td>
                                     <td>{{ number_format(round($supply->unit_purchase_price), 0, ',', ' ') }} FC</td>
-                                    <td>{{ $supply->quantity_in_stock }} : {{ $supply->unit_sigle }}</td>
+                                    <td>{{ $supply->quantity_in_stock }} : {{ $supply->product->unit->unit_sigle }}</td>
                                     <td>{{ \Carbon\Carbon::parse($supply->supply_date)->format('d-m-Y') }}</td>
                                     <td>{{ $supply->expiration_date }}</td>
                                     <td>
@@ -71,7 +71,8 @@
                                                 <i class="bi bi-three-dots-vertical"></i>
                                             </a>
                                             <div class="dropdown-menu p-0" style="">
-                                                <a class="dropdown-item" href="{{ route('app.supply.products') }}">Voir plus</a>
+                                                <a class="dropdown-item"
+                                                   href="{{ route('app.supply.products') }}">Voir plus</a>
                                                 <a class="dropdown-item"
                                                    wire:click.prevent='editSupply({{ $supply->id }})' href="#">Edit</a>
                                                 <a class="dropdown-item"
@@ -102,6 +103,8 @@
             </div>
 
 
+
+
         </div>
 
     </div>
@@ -116,8 +119,8 @@
                   @else wire:submit.prevent='addSupply()' @endif >
 
                 <div class="modal-header">
-                    <h5 class="modal-title">{{ $updateSupplyMode? "Mise à jour de la ligne d'approvisionnement N° ".$selected_id."":'Création d\'une nouvelle ligne d\'approvisionnement' }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title text-uppercase">{{ $updateSupplyMode? "Mise à jour de la ligne d'appro du produit: ".$product_name." " :'Création d\'une nouvelle ligne d\'approvisionnement' }}</h5>
+                    <button type="button" class="btn-close"  aria-label="Close" data-bs-dismiss="modal" ></button>
                 </div>
                 <div class="modal-body">
                     @csrf

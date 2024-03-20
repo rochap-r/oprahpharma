@@ -33,6 +33,7 @@ class Cart extends Component
     protected $listeners = [
         'resetForm',
         'refreshCart' => '$refresh',
+        'hideCartModal',
         'quantity-error' => 'handleQuantityError',
         'quantity-error-checkout ' => 'handleQuantityError',
         'quantity-error-empty ' => 'handleQuantityError',
@@ -67,31 +68,37 @@ class Cart extends Component
 
     public function addToCart($productId, $quantity)
     {
-        $product = Product::find($productId);
+        DB::transaction(function () use ($productId, $quantity) {
+            $product = Product::find($productId);
 
-        if ($product) {
-            if (empty($quantity)) {
-                // Émettez un événement Livewire pour déclencher l'alerte JavaScript lorsque le stock est < à la qté spécifiée
-                $this->dispatchBrowserEvent('quantity-error-empty', [
-                    'quantity' => 0,
-                ]);
-            } else {
-                if ($quantity > $product->supplies->last()->quantity_in_stock) {
+            if ($product) {
+                if (empty($quantity)) {
                     // Émettez un événement Livewire pour déclencher l'alerte JavaScript lorsque le stock est < à la qté spécifiée
-                    $this->dispatchBrowserEvent('quantity-error', [
-                        'quantity' => $quantity, 'quantityInStock' => $product->supplies->last()->quantity_in_stock
+                    $this->dispatchBrowserEvent('quantity-error-empty', [
+                        'quantity' => 0,
                     ]);
                 } else {
+                    $product->supplies()->lockForUpdate()->get();
+                    if ($quantity > $product->supplies->last()->quantity_in_stock) {
+                        // Émettez un événement Livewire pour déclencher l'alerte JavaScript lorsque le stock est < à la qté spécifiée
+                        $this->dispatchBrowserEvent('quantity-error', [
+                            'quantity' => $quantity, 'quantityInStock' => $product->supplies->last()->quantity_in_stock
+                        ]);
+                    } else {
+                        if (!isset($this->cart[$product->id])) {
+                            $this->cart[$product->id] = 0;
+                        }
+                        $this->cart[$product->id] += $quantity;
 
-                    $this->cart[$product->id] = $quantity;
-
-                    $this->total += $quantity * $product->unit_price;
-                    $this->search = null;
-                    $this->dispatchBrowserEvent('hideCheckoutModal');
+                        $this->total += $quantity * $product->unit_price;
+                        $this->search = null;
+                        $this->dispatchBrowserEvent('hideCheckoutModal');
+                    }
                 }
             }
-        }
+        });
     }
+
 
 
     public function handleQuantityError(): void
@@ -152,6 +159,7 @@ class Cart extends Component
         $this->total = 0;
         // Émettre l'événement de rafraîchissement
         $this->emit('updateCart');
+        $this->dispatchBrowserEvent('hideCartModal');
     }
 
     private function createOrder()
@@ -280,7 +288,7 @@ class Cart extends Component
             $products = Product::where('product_name', 'like', "%{$this->search}%")
                 ->with(['supplies' => function ($query) {
                     $query->where('quantity_in_stock', '>=', 0)
-                        ->orderBy('supply_date', 'desc');
+                        ->orderBy('supply_date', 'asc');
                 }, 'unit'])
                 ->get();
         }

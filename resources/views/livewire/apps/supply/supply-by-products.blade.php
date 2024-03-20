@@ -135,8 +135,10 @@
                   @else wire:submit.prevent='addSupply()' @endif >
 
                 <div class="modal-header">
-                    <h5 class="modal-title">{{ $updateSupplyMode? "Mise à jour de la ligne d'approvisionnement N° ".$selected_id."":'Création d\'une nouvelle ligne d\'approvisionnement' }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title text-uppercase">{{ $updateSupplyMode? "Mise à jour de la ligne d'appro du produit: ".$product_name." " :'Création d\'une nouvelle ligne d\'approvisionnement' }}</h5>
+
+                    <button type="button" class="btn-close"  aria-label="Close" @if(!$updateSupplyMode) data-bs-dismiss="modal"  @endif ></button>
+
                 </div>
                 <div class="modal-body">
                     @csrf
@@ -195,7 +197,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn me-auto" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn me-auto" data-bs-dismiss="modal" wire:click="resetModal">Annuler</button>
                     <button type="submit"
                             class="btn btn-primary">{{ $updateSupplyMode? 'Mettre à jour':'Enregistrer' }}</button>
                 </div>

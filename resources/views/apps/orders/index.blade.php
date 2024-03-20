@@ -33,18 +33,29 @@
 @endsection
 @push('script')
     <script>
-        window.addEventListener('showCheckoutModal', function() {
+        /*window.addEventListener('showCheckoutModal', function() {
             var modalElement = document.getElementById('checkout_modal');
             var modal = new bootstrap.Modal(modalElement, {
                 backdrop: 'static', // Empêche l'utilisateur de fermer la fenêtre en cliquant à l'extérieur
                 keyboard: false // Empêche l'utilisateur de fermer la fenêtre en appuyant sur ECHAP
             });
             modal.show();
+        });*/
+
+        window.addEventListener('showCheckoutModal', function (e) {
+            $('#checkout_modal').modal('show');
         });
 
 
         window.addEventListener('hideCheckoutModal', function(e) {
             $('#checkout_modal').modal('hide');
+
+            // Émettre l'événement de rafraîchissement
+            window.livewire.emit('updateCart');
+        });
+
+        window.addEventListener('hideCartModal', function(e) {
+            $('#cart_modal').modal('hide');
 
             // Émettre l'événement de rafraîchissement
             window.livewire.emit('updateCart');

@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Apps;
 
 use App\Models\Supply;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -21,7 +22,7 @@ class Supplies extends Component
 
     protected $listeners = [
         'resetForm',
-        'deleteSupplyAction',
+        'time-error' => 'handleTimeError',
         'productSelected' => 'updateProductId'
     ];
 
@@ -29,6 +30,11 @@ class Supplies extends Component
     public function updateProductId($productId)
     {
         $this->product_id = $productId; // Mettre à jour la propriété avec l'ID du produit
+    }
+
+    public function handleTimeError(): void
+    {
+        $this->errorMessage = 'La durée de modification est déjà au delà de 48h ';
     }
 
     public function mount()
@@ -67,106 +73,45 @@ class Supplies extends Component
             'expiration_date.after' => 'La date d\'expiration doit être supérieure à la date d\'achat',
         ]);
 
-
-        $supply = new Supply();
-        $supply->product_id = $this->product_id;
-        $supply->quantity_purchased = $this->quantity_purchased;
-        $supply->quantity_in_stock = $this->updateQuantityInStock($this->product_id, $this->quantity_purchased);
-        $supply->unit_purchase_price = $this->unit_purchase_price;
-        $supply->supply_date = $this->supply_date;
-        $supply->expiration_date = $this->expiration_date;
-        $result = $supply->save();
-
-        if ($result) {
-            $this->dispatchBrowserEvent('hideSupplyModal');
-            $this->showToastr('La nouvelle ligne d\'approvisionnement a été enregistrée avec succès !', 'success');
-            $this->product_id = $this->quantity_purchased = $this->unit_purchase_price = $this->supply_date = $this->expiration_date = null;
-            $this->resetForm();
-            $this->emit('resetComponent');
-        } else {
-            $this->showToastr('Oups ! Quelque chose n\'a pas bien fonctionné !', 'error');
-        }
-    }
-
-    public function updateQuantityInStock(int $product_id, int $quantity_purchased, int $selected_id = 0): int
-    {
-        //dd($this->quantity_purchased);
-        if ($selected_id) {
-            $supply = Supply::find($selected_id);
-            $current_quantity = $supply->quantity_in_stock - $supply->quantity_purchased;
-            $this->quantity_in_stock = $current_quantity + $quantity_purchased;
-        } else {
-            $supply = Supply::where('product_id', $product_id)->latest()->first();
-            //dd($supply);
-            if (!empty($supply)) {
-                $this->quantity_in_stock = $supply->quantity_in_stock + $quantity_purchased;
-            } else {
-                $this->quantity_in_stock = (int)$quantity_purchased;
-            }
-        }
-
-        return $this->quantity_in_stock;
-    }
-
-    public function editSupply(int $id)
-    {
-        $supply = Supply::findOrFail($id);
-        $this->selected_id = $supply->id;
-        $this->product_id = $supply->product_id;
-        $this->quantity_purchased = $supply->quantity_purchased;
-        $this->unit_purchase_price = $supply->unit_purchase_price;
-        $this->supply_date = $supply->supply_date;
-        $this->expiration_date = $supply->expiration_date;
-        $this->updateSupplyMode = true;
-        $this->resetErrorBag();
-        $this->dispatchBrowserEvent('showEditSupplyModal');
-    }
-
-
-    public function updateSupply()
-    {
-        if ($this->selected_id) {
-            $this->validate([
-                'product_id' => 'required|exists:products,id',
-                'quantity_purchased' => 'required|numeric|min:1',
-                'unit_purchase_price' => 'required|numeric|min:0',
-                'supply_date' => 'required|date',
-                'expiration_date' => 'required|date|after_or_equal:supply_date',
-            ], [
-                'product_id.required' => 'Le choix du produit est obligatoire.',
-                'product_id.exists' => 'Le produit sélectionné n\'existe pas.',
-                'quantity_purchased.required' => 'La quantité achetée est obligatoire.',
-                'quantity_purchased.numeric' => 'La quantité achetée doit être un nombre.',
-                'quantity_purchased.min' => 'La quantité achetée doit être au moins 1.',
-                'unit_purchase_price.required' => 'Le prix d\'achat unitaire est obligatoire.',
-                'unit_purchase_price.numeric' => 'Le prix d\'achat unitaire doit être un nombre.',
-                'unit_purchase_price.min' => 'Le prix d\'achat unitaire ne peut pas être négatif.',
-
-                'supply_date.required' => 'La date d\'achat est obligatoire.',
-                'supply_date.date' => 'La date d\'achat doit être une date valide.',
-                'expiration_date.required' => 'La date d\'expiration est obligatoire.',
-                'expiration_date.date' => 'La date d\'expiration doit être une date valide.',
-                'expiration_date.after_or_equal' => 'La date d\'expiration doit être après ou égale à la date d\'achat.',
-            ]);
-
-
-            $supply = Supply::findOrFail($this->selected_id);
+        DB::transaction(function () {
+            $supply = new Supply();
             $supply->product_id = $this->product_id;
             $supply->quantity_purchased = $this->quantity_purchased;
-            $supply->quantity_in_stock = $this->updateQuantityInStock($this->product_id, $this->quantity_purchased, $this->selected_id);
+            $supply->quantity_in_stock = $this->updateQuantityInStock($this->product_id, $this->quantity_purchased);
             $supply->unit_purchase_price = $this->unit_purchase_price;
             $supply->supply_date = $this->supply_date;
             $supply->expiration_date = $this->expiration_date;
+            $result = $supply->save();
 
-            if ($supply->save()) {
+            if ($result) {
                 $this->dispatchBrowserEvent('hideSupplyModal');
-                $this->updateSupplyMode = false;
+                $this->showToastr('La nouvelle ligne d\'approvisionnement a été enregistrée avec succès !', 'success');
+                $this->product_id = $this->quantity_purchased = $this->unit_purchase_price = $this->supply_date = $this->expiration_date = null;
                 $this->resetForm();
-                $this->showToastr('Une ligne d\'appro a bien été mis à jour!', 'success');
+                $this->emit('resetComponent');
             } else {
-                $this->showToastr('Oups! Quelque chose n\'a pas bien fonctionné!', 'error');
+                $this->showToastr('Oups ! Quelque chose n\'a pas bien fonctionné !', 'error');
             }
-        }
+        });
+    }
+
+
+    public function updateQuantityInStock(int $product_id, int $quantity_purchased): int
+    {
+        $quantity_in_stock = 0;
+        // Utilisez une transaction pour éviter les conditions de course
+        DB::transaction(function () use ($product_id, $quantity_purchased, &$quantity_in_stock) {
+            if ($product_id !== 0) {
+                $supply = Supply::where('product_id', $product_id)->latest()->lockForUpdate()->first();
+                // Vérifiez si l'enregistrement existe
+                if (!$supply) {
+                    $quantity_in_stock = (int)$quantity_purchased;
+                } else {
+                    $quantity_in_stock = $supply->quantity_in_stock + $quantity_purchased;
+                }
+            }
+        });
+        return $quantity_in_stock;
     }
 
 
@@ -178,30 +123,6 @@ class Supplies extends Component
         ]);
     }
 
-    public function deleteSupplyAction(int $id)
-    {
-        $supply = Supply::find($id);
-        //dd($supply);
-        if ($supply) {
-            $supply->delete();
-            $this->showToastr("La fourniture a été supprimée avec succès.", 'info');
-        } else {
-            $this->showToastr("Il est impossible de supprimer cette fourniture, qui est configurée par défaut.", 'error');
-        }
-    }
-
-
-    public function deleteSupply(int $id)
-    {
-        $supply = Supply::find($id);
-        if ($supply || $supply->product) {
-            $this->dispatchBrowserEvent('deleteSupply', [
-                'title' => 'Etes-vous vraiment sûr de supprimer cette ligne d\'Approvisionnement?',
-                'html' => "Suppression de la ligne d\'Appro du produit: " . $supply->product->product_name,
-                'id' => $supply->id
-            ]);
-        }
-    }
 
 
     public function render()

@@ -9,8 +9,30 @@
 @endsection
 @push('script')
     <script>
+        //time error
+        window.addEventListener('time-error', function(event) {
+            var supply_date = event.detail.supply_date;
+            var hours = event.detail.hours;
+            alert('Impossible d\'effectuer cette operation, car la durée d\'édition est déjà au plus de  ' + hours + ' heures depuis le '+supply_date+'');
+        });
+
+        //maj error
+        window.addEventListener('quantity-error', function(event) {
+
+            alert('Impossible d\'effectuer cette operation, rassurez-vous que le stock n\'est ' +
+                'pas encore utilisé ou ce que votre nouvelle quantité commandée est superieure à l\'ancienne');
+        });
+        //delete error
+        window.addEventListener('time-qte-error', function(event) {
+            var heures = event.detail.heures
+            alert('Impossible d\'effectuer cette operation, rassurez-vous que le stock n\'est ' +
+                'pas encore utilisé et que la ligne d\'approvisionnement a été créé dans '+heures+' heures moins');
+        });
+
         window.addEventListener('hideSupplyModal', function (e) {
             $('#supply_modal').modal('hide');
+            Livewire.emit('resetSupplyForm');
+            Livewire.emit('resetComponent');
         });
 
         window.addEventListener('showEditSupplyModal', function (e) {
