@@ -38,6 +38,10 @@ class Cart extends Component
         'quantity-error-checkout ' => 'handleQuantityError',
         'quantity-error-empty ' => 'handleQuantityError',
     ];
+    /**
+     * @var float|int|mixed
+     */
+    public int $totalQuantity=0;
 
     public function mount()
     {
@@ -66,6 +70,8 @@ class Cart extends Component
     }
 
 
+
+
     public function addToCart($productId, $quantity)
     {
         DB::transaction(function () use ($productId, $quantity) {
@@ -73,23 +79,22 @@ class Cart extends Component
 
             if ($product) {
                 if (empty($quantity)) {
-                    // Émettez un événement Livewire pour déclencher l'alerte JavaScript lorsque le stock est < à la qté spécifiée
                     $this->dispatchBrowserEvent('quantity-error-empty', [
                         'quantity' => 0,
                     ]);
                 } else {
                     $product->supplies()->lockForUpdate()->get();
-                    if ($quantity > $product->supplies->last()->quantity_in_stock) {
-                        // Émettez un événement Livewire pour déclencher l'alerte JavaScript lorsque le stock est < à la qté spécifiée
+                    $totalQuantity = (isset($this->cart[$product->id]) ? $this->cart[$product->id] : 0) + $quantity;
+                    if ($totalQuantity > $product->supplies->last()->quantity_in_stock) {
                         $this->dispatchBrowserEvent('quantity-error', [
-                            'quantity' => $quantity, 'quantityInStock' => $product->supplies->last()->quantity_in_stock
+                            'quantity' => $totalQuantity, 'quantityInStock' => $product->supplies->last()->quantity_in_stock
                         ]);
                     } else {
                         if (!isset($this->cart[$product->id])) {
                             $this->cart[$product->id] = 0;
                         }
                         $this->cart[$product->id] += $quantity;
-
+                        $this->totalQuantity = count($this->cart);
                         $this->total += $quantity * $product->unit_price;
                         $this->search = null;
                         $this->dispatchBrowserEvent('hideCheckoutModal');
@@ -98,6 +103,7 @@ class Cart extends Component
             }
         });
     }
+
 
 
 
@@ -160,6 +166,7 @@ class Cart extends Component
         // Émettre l'événement de rafraîchissement
         $this->emit('updateCart');
         $this->dispatchBrowserEvent('hideCartModal');
+        $this->search = null;
     }
 
     private function createOrder()

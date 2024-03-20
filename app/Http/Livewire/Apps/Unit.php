@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Apps;
 
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Unit as Units;
@@ -53,19 +54,20 @@ class Unit extends Component
             'unit_sigle.unique' => 'ce nom de l\'abréviation unité de mesure existe déjà veuillez réessayez un autre!',
             'unit_sigle.max' => 'l\'abréviation de l\'unité de mesure ne doit pas dépasser 10 caractères',
         ]);
-
-        $unit=new Units();
-        $unit->unit_name=$this->unit_name;
-        $unit->unit_sigle=$this->unit_sigle;
-        $unit->minimum_stock_level=$this->minimum_stock_level;
-        $result=$unit->save();
-        if ($result){
-            $this->dispatchBrowserEvent('hideUnitModal');
-            $this->unit_name=$this->unit_sigle=$this->minimum_stock_level=null;
-            $this->showToastr('La nouvelle unité de mesure a  été enregistré avec succès!','success');
-        }else{
-            $this->showToastr('Oups! Quelque chose n\'a pas bien fonctionné!','error');
-        }
+        DB::transaction(function () {
+            $unit = new Units();
+            $unit->unit_name = $this->unit_name;
+            $unit->unit_sigle = $this->unit_sigle;
+            $unit->minimum_stock_level = $this->minimum_stock_level;
+            $result = $unit->save();
+            if ($result) {
+                $this->dispatchBrowserEvent('hideUnitModal');
+                $this->unit_name = $this->unit_sigle = $this->minimum_stock_level = null;
+                $this->showToastr('La nouvelle unité de mesure a  été enregistré avec succès!', 'success');
+            } else {
+                $this->showToastr('Oups! Quelque chose n\'a pas bien fonctionné!', 'error');
+            }
+        });
 
     }
 
@@ -98,20 +100,22 @@ class Unit extends Component
                 'unit_sigle.max' => 'l\'abréviation de l\'unité de mesure ne doit pas dépasser 10 caractères',
             ]);
 
+            DB::transaction(function () {
+                $unit=Units::findOrFail($this->selected_id);
+                $unit->unit_name=$this->unit_name;
+                $unit->unit_sigle=$this->unit_sigle;
+                $unit->minimum_stock_level=$this->minimum_stock_level;
+                $result=$unit->save();
+                if ($result){
+                    $this->dispatchBrowserEvent('hideUnitModal');
+                    $this->updateUnitMode=false;
+                    $this->unit_name=$this->unit_sigle=$this->minimum_stock_level=null;
+                    $this->showToastr('L\'unité de mésure  a bien été mise à jour!','success');
+                }else{
+                    $this->showToastr('Oups! Quelque chose n\'a pas bien fonctionné!','error');
+                }
+            });
 
-            $unit=Units::findOrFail($this->selected_id);
-            $unit->unit_name=$this->unit_name;
-            $unit->unit_sigle=$this->unit_sigle;
-            $unit->minimum_stock_level=$this->minimum_stock_level;
-            $result=$unit->save();
-            if ($result){
-                $this->dispatchBrowserEvent('hideUnitModal');
-                $this->updateUnitMode=false;
-                $this->unit_name=$this->unit_sigle=$this->minimum_stock_level=null;
-                $this->showToastr('L\'unité de mésure  a bien été mise à jour!','success');
-            }else{
-                $this->showToastr('Oups! Quelque chose n\'a pas bien fonctionné!','error');
-            }
 
         }
     }

@@ -116,7 +116,7 @@
                     <a href="#" data-bs-toggle="modal" data-bs-target="#cart_modal">
                         <div class="alert alert-secondary">
                             <h5 class="text-secondary text-uppercase" id="checkoutModalLabel">
-                                Total à Payer
+                                {{ $totalQuantity }} {{ $totalQuantity<=1 ? 'produit':'produits' }}
                             </h5>
                             <h5 class="text-secondary text-uppercase" id="checkoutModalLabel">
                                 {{ number_format($total, 0, ',', ' ') }} FC
@@ -255,7 +255,7 @@
                     ?>
                     <div class="form-group mb-3">
                         <label class="form-label" for="qt">
-                            Quantité | STCK MX (<span
+                                {{ $this->product ? number_format($this->product->unit_price, 0, ',', ' ') : 0 }} FC | STCK MX (<span
                                 class="text-success">{{ $this->product ? $lastSupply->quantity_in_stock : 0 }}</span>)
                             | {{ $this->product ? $product->unit->unit_sigle : '' }}
                         </label>

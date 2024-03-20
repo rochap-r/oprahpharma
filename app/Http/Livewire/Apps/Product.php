@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Apps;
 
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Product as Products;
@@ -51,19 +52,23 @@ class Product extends Component
 
             'unit_id.required' => 'sélectionnez l\'unité de mésure.',
         ]);
-        $product=new Products();
-        $product->product_name=$this->product_name;
-        $product->product_description=$this->product_description;
-        $product->unit_price=$this->unit_price;
-        $product->unit_id=$this->unit_id;
-        $result=$product->save();
-        if ($result){
-            $this->dispatchBrowserEvent('hideProductModal');
-            $this->product_name=$this->product_description=$this->unit_price=$this->unit_id=null;
-            $this->showToastr('Un nouveau Produit a  été enregistré avec succès!','success');
-        }else{
-            $this->showToastr('Oups! Quelque chose n\'a pas bien fonctionné!','error');
-        }
+        DB::transaction(function () {
+            $product = new Products();
+            $product->product_name = $this->product_name;
+            $product->product_description = $this->product_description;
+            $product->unit_price = $this->unit_price;
+            $product->unit_id = $this->unit_id;
+            $result = $product->save();
+
+            if ($result) {
+                $this->dispatchBrowserEvent('hideProductModal');
+                $this->product_name = $this->product_description = $this->unit_price = $this->unit_id = null;
+                $this->showToastr('Un nouveau Produit a  été enregistré avec succès!', 'success');
+            } else {
+                $this->showToastr('Oups! Quelque chose n\'a pas bien fonctionné!', 'error');
+            }
+        });
+
 
     }
 
@@ -96,21 +101,24 @@ class Product extends Component
                 'unit_id.required' => 'L\'unité de mésure est obligatoire.',
             ]);
 
-            $product=Products::findOrFail($this->selected_id);
-            $product->product_name=$this->product_name;
-            $product->product_description=$this->product_description;
-            $product->unit_price=$this->unit_price;
-            $product->unit_id=$this->unit_id;
-            //$category->slug=Str::slug($this->name);
-            $result=$product->save();
-            if ($result){
-                $this->dispatchBrowserEvent('hideProductModal');
-                $this->updateProductMode=false;
-                $this->product_name=$this->product_description=$this->unit_price=null;
-                $this->showToastr('Le nouveau produit a bien été mis à jour!','success');
-            }else{
-                $this->showToastr('Oups! Quelque chose n\'a pas bien fonctionné!','error');
-            }
+            DB::transaction(function () {
+                $product = Products::findOrFail($this->selected_id);
+                $product->product_name = $this->product_name;
+                $product->product_description = $this->product_description;
+                $product->unit_price = $this->unit_price;
+                $product->unit_id = $this->unit_id;
+                $result = $product->save();
+
+                if ($result) {
+                    $this->dispatchBrowserEvent('hideProductModal');
+                    $this->updateProductMode = false;
+                    $this->product_name = $this->product_description = $this->unit_price = null;
+                    $this->showToastr('Le nouveau produit a bien été mis à jour!', 'success');
+                } else {
+                    $this->showToastr('Oups! Quelque chose n\'a pas bien fonctionné!', 'error');
+                }
+            });
+
 
         }
     }
@@ -130,7 +138,7 @@ class Product extends Component
             $product->delete();
             $this->showToastr("le produit a été supprimé avec succès.", 'info');
         }else{
-            $this->showToastr("Il est impossible de supprimer ce produit, qui est configurée par defaut.", 'error');
+            $this->showToastr("Il est impossible de supprimer ce produit.", 'error');
         }
 
     }
@@ -138,12 +146,16 @@ class Product extends Component
     public function deleteProduct(int $id)
     {
         $product=Products::find($id);
-        $this->dispatchBrowserEvent('deleteProduct',[
-            'title'=>'Etes-vous vraiment sure de supprimer ce produit?',
-            'html'=>"Suppression du produit: ".$product->product_name,
-            'id'=>$product->id
+        if ($product->supplies->isEmpty()){
+            $this->dispatchBrowserEvent('deleteProduct',[
+                'title'=>'Etes-vous vraiment sure de supprimer ce produit?',
+                'html'=>"Suppression du produit: ".$product->product_name,
+                'id'=>$product->id
+            ]);
+        }else{
+            $this->showToastr("Il est impossible de supprimer ce produit il est lié aux lignes d'appros.", 'error');
+        }
 
-        ]);
     }
 
     public function render()
