@@ -41,7 +41,8 @@ class Cart extends Component
     /**
      * @var float|int|mixed
      */
-    public int $totalQuantity=0;
+
+    public int $totalProduct=0;
 
     public function mount()
     {
@@ -94,7 +95,7 @@ class Cart extends Component
                             $this->cart[$product->id] = 0;
                         }
                         $this->cart[$product->id] += $quantity;
-                        $this->totalQuantity = count($this->cart);
+                        $this->totalProduct = count($this->cart);
                         $this->total += $quantity * $product->unit_price;
                         $this->search = null;
                         $this->dispatchBrowserEvent('hideCheckoutModal');
@@ -123,17 +124,21 @@ class Cart extends Component
 
     public function removeFromCart($productId)
     {
-        if (isset($this->cart[$productId])) {
-            $product = Product::find($productId);
-            if ($product) {
-                // Mettre à jour le total
-                $this->total -= $this->cart[$productId] * $product->unit_price;
+        DB::transaction(function () use ($productId) {
+            if (isset($this->cart[$productId])) {
+                $product = Product::find($productId);
+                if ($product) {
+                    // Mettre à jour le total
+                    $this->total -= $this->cart[$productId] * $product->unit_price;
+                    // Supprimer le produit du panier
+                    unset($this->cart[$productId]);
+                }
+                $this->totalProduct = count($this->cart);
             }
-
-            // Supprimer le produit du panier
-            unset($this->cart[$productId]);
-        }
+        });
     }
+
+
 
 
     public function resetModal()

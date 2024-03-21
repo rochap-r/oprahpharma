@@ -116,7 +116,7 @@
                     <a href="#" data-bs-toggle="modal" data-bs-target="#cart_modal">
                         <div class="alert alert-secondary">
                             <h5 class="text-secondary text-uppercase" id="checkoutModalLabel">
-                                {{ $totalQuantity }} {{ $totalQuantity<=1 ? 'produit':'produits' }}
+                                {{ $totalProduct }} {{ $totalProduct <= 1 ? 'produit':'produits' }}
                             </h5>
                             <h5 class="text-secondary text-uppercase" id="checkoutModalLabel">
                                 {{ number_format($total, 0, ',', ' ') }} FC
@@ -285,9 +285,11 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title text-uppercase" id="checkoutModalLabel">
+                    <h5 class="modal-title text-uppercase text-success" id="checkoutModalLabel">
                         Total à Payer: {{ number_format($total, 0, ',', ' ') }}
-                        FC
+                        FC &nbsp;|&nbsp; <span class="badge-soft-success bg-white">
+                            {{ $totalProduct }} {{ $totalProduct <= 1 ? 'produit':'produits' }}
+                        </span>
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
