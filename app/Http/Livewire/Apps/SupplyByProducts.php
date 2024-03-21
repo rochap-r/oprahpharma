@@ -26,7 +26,8 @@ class SupplyByProducts extends Component
         'time-error' => 'handleTimeError',
         'quantity-error' => 'handleQuantityError',
         'time-qte-error',
-        'deleteSupplyAction'
+        'deleteSupplyAction',
+        'productSelected' => 'updateProductId'
     ];
 
 
@@ -47,6 +48,7 @@ class SupplyByProducts extends Component
         $this->updateSupplyMode = false;
         $this->product_id = $this->quantity_purchased = $this->unit_purchase_price = $this->supply_date = $this->expiration_date = null;
     }
+
 
     public function addSupply()
     {

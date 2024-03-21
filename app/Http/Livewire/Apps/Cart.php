@@ -276,6 +276,7 @@ class Cart extends Component
     private function clearCart()
     {
         $this->cart = [];
+        $this->totalProduct = count($this->cart);
     }
 
     private function showSuccessMessage()

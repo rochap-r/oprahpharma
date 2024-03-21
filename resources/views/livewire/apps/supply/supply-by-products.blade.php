@@ -25,20 +25,10 @@
                                 <path d="M12 5l0 14"></path>
                                 <path d="M5 12l14 0"></path>
                             </svg>
-                            Appro
                         </a>
 
-                        <a class="btn btn-sm btn-info pl-2" href="{{ route('app.product.index') }}">
-                            <!-- Download SVG icon from http://tabler-icons.io/i/settings -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="24"
-                                 height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                 stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                <path d="M12 5l0 14"></path>
-                                <path d="M5 12l14 0"></path>
-                            </svg>
-                            Produit
-                        </a>
+                        @livewire('apps.load-supply')
+
                         <a class="btn btn-sm btn-secondary pl-2" href="{{ route('app.supply.index') }}">
                             <!-- Download SVG icon from http://tabler-icons.io/i/settings -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home-2"
@@ -49,9 +39,9 @@
                                 <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"></path>
                                 <path d="M10 12h4v4h-4z"></path>
                             </svg>
-                            Appros
                         </a>
                     </div>
+
                 </div>
 
 
@@ -123,6 +113,8 @@
         </div>
 
     </div>
+
+
 
 
     <!-- model de creation et mise à jour des categories !-->
@@ -204,6 +196,7 @@
             </form>
         </div>
     </div>
+
 
 
 </div>
